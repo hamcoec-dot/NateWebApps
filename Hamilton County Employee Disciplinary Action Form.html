@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamilton County Employee Disciplinary Action Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            @page { margin: 0.25in; size: portrait; }
+            * { box-sizing: border-box !important; }
+            body { 
+                background-color: white !important; 
+                font-size: 9px !important;
+                line-height: 1.2 !important;
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            .no-print { display: none !important; }
+            
+            /* Flatten inputs for paper */
+            input[type="text"], input[type="date"], select {
+                border: none !important;
+                border-bottom: 1px solid #000 !important;
+                border-radius: 0 !important;
+                background-color: transparent !important;
+                box-shadow: none !important;
+                padding: 0 0 2px 0 !important;
+                margin-bottom: 2px !important;
+                font-size: 9px !important;
+                appearance: none !important;
+                -webkit-appearance: none !important;
+                width: 100% !important;
+                height: auto !important;
+            }
+
+            p, span, label, div { line-height: 1.2 !important; }
+        }
+        input, textarea, select {
+            transition: all 0.2s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 1px #2563eb;
+        }
+        /* Hide scrollbars for auto-expanding textareas */
+        textarea {
+            overflow: hidden;
+            resize: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 py-8 print:py-0 px-4 sm:px-8 font-sans text-gray-800 print:text-[9px]">
+
+    <div class="max-w-4xl mx-auto bg-white p-8 print:p-0 shadow-lg print:shadow-none border-t-8 print:border-t-2 border-blue-800 print:border-gray-800 rounded-lg print:rounded-none">
+        
+        <!-- Action Bar (Hidden on Print) -->
+        <div class="flex justify-end mb-6 no-print">
+            <button onclick="window.print()" class="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                Print / Save to PDF
+            </button>
+        </div>
+
+        <!-- Header -->
+        <div class="text-center border-b-2 border-blue-800 print:border-gray-800 pb-6 mb-6 print:pb-2 print:mb-2">
+            <h1 class="text-2xl print:text-base font-black uppercase tracking-wide text-gray-900 print:m-0">Hamilton County Government</h1>
+            <h2 class="text-xl print:text-xs font-bold text-gray-700 mt-1 print:mt-0">Employee Disciplinary Action & Warning Report</h2>
+        </div>
+
+        <!-- Employee Info Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-6 mb-6 print:gap-x-6 print:gap-y-2 print:mb-2">
+            <div class="flex flex-col w-full">
+                <label class="font-bold text-sm print:text-[8px] text-gray-600 uppercase">Employee Name</label>
+                <input type="text" class="w-full border-b-2 border-gray-300 py-1 print:py-0 bg-gray-50 focus:bg-white" placeholder="First & Last Name">
+            </div>
+            <div class="flex flex-col w-full">
+                <label class="font-bold text-sm print:text-[8px] text-gray-600 uppercase">Job Title</label>
+                <input type="text" class="w-full border-b-2 border-gray-300 py-1 print:py-0 bg-gray-50 focus:bg-white" placeholder="Current Title">
+            </div>
+            <div class="flex flex-col w-full">
+                <label class="font-bold text-sm print:text-[8px] text-gray-600 uppercase">Division</label>
+                <input type="text" class="w-full border-b-2 border-gray-300 py-1 print:py-0 bg-gray-50 focus:bg-white" placeholder="Division Name">
+            </div>
+            <div class="flex flex-col w-full">
+                <label class="font-bold text-sm print:text-[8px] text-gray-600 uppercase">Department</label>
+                <input type="text" class="w-full border-b-2 border-gray-300 py-1 print:py-0 bg-gray-50 focus:bg-white" placeholder="Department Name">
+            </div>
+            <div class="flex flex-col w-full">
+                <label class="font-bold text-sm print:text-[8px] text-gray-600 uppercase">Incident Date(s)</label>
+                <input type="text" class="w-full border-b-2 border-gray-300 py-1 print:py-0 bg-gray-50 focus:bg-white" placeholder="MM/DD/YYYY">
+            </div>
+            <div class="flex flex-col w-full">
+                <label class="font-bold text-sm print:text-[8px] text-gray-600 uppercase">Discussion Date</label>
+                <input type="date" class="w-full border-b-2 border-gray-300 py-1 print:py-0 bg-gray-50 focus:bg-white">
+            </div>
+            <div class="flex items-center space-x-2 sm:col-span-2 print:col-span-2 print:mt-1">
+                <input type="checkbox" id="intro-period-checkbox" class="h-4 w-4 print:h-3 print:w-3 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer print:m-0">
+                <span class="text-sm print:text-[9px] font-bold text-gray-800">Employee is in their Introductory Period (First 12 Months)</span>
+                <span class="text-xs print:text-[8px] text-gray-500 italic ml-1">- No right to appeal per Section 204</span>
+            </div>
+        </div>
+
+        <!-- Prior Corrective Actions -->
+        <div class="mb-6 print:mb-2">
+            <h3 class="font-bold text-sm print:text-[9px] text-gray-800 border-b border-gray-300 pb-1 print:pb-0 mb-3 print:mb-1">Prior Corrective Actions (Progressive Discipline Tracking)</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 print:grid-cols-3 gap-4 print:gap-x-4 print:gap-y-2">
+                <div class="flex flex-col w-full">
+                    <label class="font-bold text-xs print:text-[8px] text-gray-600 uppercase">Verbal Warning Date</label>
+                    <input type="date" class="w-full border-b-2 border-gray-300 py-1 print:py-0 bg-gray-50 focus:bg-white text-xs print:text-[8px]">
+                </div>
+                <div class="flex flex-col w-full">
+                    <label class="font-bold text-xs print:text-[8px] text-gray-600 uppercase">Written Warning Date</label>
+                    <input type="date" class="w-full border-b-2 border-gray-300 py-1 print:py-0 bg-gray-50 focus:bg-white text-xs print:text-[8px]">
+                </div>
+                <div class="flex flex-col w-full">
+                    <label class="font-bold text-xs print:text-[8px] text-gray-600 uppercase">Prior Suspension Date</label>
+                    <input type="date" class="w-full border-b-2 border-gray-300 py-1 print:py-0 bg-gray-50 focus:bg-white text-xs print:text-[8px]">
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Taken Section -->
+        <div class="bg-blue-50 print:bg-transparent p-4 print:p-2 border border-blue-200 print:border-gray-400 rounded print:rounded-none mb-6 print:mb-2">
+            <h3 class="font-bold text-lg print:text-[10px] text-blue-900 print:text-gray-900 border-b border-blue-200 print:border-gray-400 pb-2 print:pb-1 mb-4 print:mb-2">Level of Action Taken</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 print:grid-cols-2 gap-4 print:gap-y-1 print:gap-x-4">
+                <label class="flex items-start space-x-2">
+                    <input type="checkbox" id="action-vw" disabled class="mt-1 print:mt-0 h-4 w-4 print:h-3 print:w-3 text-blue-600 rounded border-gray-300 print:m-0">
+                    <span class="text-sm print:text-[9px] font-semibold">1st Level: Verbal / Informal Warning</span>
+                </label>
+                <label class="flex items-start space-x-2">
+                    <input type="checkbox" id="action-ww" disabled class="mt-1 print:mt-0 h-4 w-4 print:h-3 print:w-3 text-blue-600 rounded border-gray-300 print:m-0">
+                    <span class="text-sm print:text-[9px] font-semibold">2nd Level: Written Warning</span>
+                </label>
+                <label class="flex items-start space-x-2">
+                    <input type="checkbox" id="action-pip" disabled class="mt-1 print:mt-0 h-4 w-4 print:h-3 print:w-3 text-blue-600 rounded border-gray-300 print:m-0">
+                    <div class="text-sm print:text-[9px]">
+                        <span class="font-semibold">Performance Improvement Plan (PIP)</span>
+                        <p class="text-xs print:text-[7.5px] text-gray-500 print:text-gray-700 font-normal italic print:m-0">Traditionally issued with a written warning for performance.</p>
+                    </div>
+                </label>
+                <label class="flex items-start space-x-2">
+                    <input type="checkbox" id="action-s" disabled class="mt-1 print:mt-0 h-4 w-4 print:h-3 print:w-3 text-blue-600 rounded border-gray-300 print:m-0">
+                    <div class="text-sm print:text-[9px] w-full">
+                        <span class="font-semibold">3rd Level: Suspension</span> 
+                        <input type="text" class="w-16 border-b border-gray-400 bg-transparent text-center mx-1 print:text-[9px] pointer-events-auto print:inline-block" placeholder="Days">
+                        <p class="text-xs print:text-[7.5px] text-red-600 font-bold italic mb-1 print:m-0">Requires a Notice of Contemplated Action prior to final action.</p>
+                        <div class="flex space-x-3 print:space-x-2 pointer-events-auto mt-1 print:mt-1">
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="suspension_type" value="Investigatory" class="h-3 w-3 text-blue-600 border-gray-400 print:m-0">
+                                <span class="text-xs print:text-[8px] text-gray-700">Investigatory (up to 15 days)</span>
+                            </label>
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="suspension_type" value="Disciplinary" class="h-3 w-3 text-blue-600 border-gray-400 print:m-0">
+                                <span class="text-xs print:text-[8px] text-gray-700">Disciplinary (up to 30 days)</span>
+                            </label>
+                        </div>
+                    </div>
+                </label>
+                <label class="flex items-start space-x-2">
+                    <input type="checkbox" id="action-demotion" disabled class="mt-1 print:mt-0 h-4 w-4 print:h-3 print:w-3 text-blue-600 rounded border-gray-300 print:m-0">
+                    <span class="text-sm print:text-[9px] font-semibold">Demotion</span>
+                </label>
+                <label class="flex items-start space-x-2">
+                    <input type="checkbox" id="action-t" disabled class="mt-1 print:mt-0 h-4 w-4 print:h-3 print:w-3 text-blue-600 rounded border-gray-300 print:m-0">
+                    <div class="text-sm print:text-[9px]">
+                        <span class="font-semibold">Final Level: Termination</span>
+                        <p class="text-xs print:text-[7.5px] text-red-600 font-bold italic print:m-0">Requires a Notice of Contemplated Action prior to final action.</p>
+                    </div>
+                </label>
+                <label class="flex items-start space-x-2 sm:col-span-2 print:col-span-2 cursor-pointer">
+                    <input type="checkbox" id="action-other" class="mt-1 print:mt-0 h-4 w-4 print:h-3 print:w-3 text-blue-600 rounded border-gray-300 print:m-0 cursor-pointer">
+                    <div class="text-sm print:text-[9px] flex items-center w-full">
+                        <span class="font-semibold whitespace-nowrap mr-2">Other Action (Override):</span>
+                        <input type="text" id="action-other-text" class="w-full border-b border-gray-400 bg-transparent flex-grow pointer-events-auto print:text-[9px]" placeholder="Specify manual override action">
+                    </div>
+                </label>
+            </div>
+            <p class="text-xs print:text-[7.5px] text-gray-600 print:text-gray-800 mt-4 print:mt-2 italic border-t border-blue-200 print:border-gray-400 pt-2 print:pt-1">* Note: Hamilton County Government reserves the right, depending on the severity of the offense, to determine the most appropriate level of discipline, up to and including termination.</p>
+        </div>
+
+        <!-- Infraction Category & Specific Infraction -->
+        <div class="mb-6 print:mb-2">
+            <h3 class="font-bold text-lg print:text-[10px] text-gray-800 border-b-2 border-gray-800 pb-2 print:pb-1 mb-4 print:mb-2">Category of Infraction</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-4 print:grid-cols-4 gap-4 print:gap-2 mb-4 print:mb-2">
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="radio" name="infraction_category" value="Attendance" class="h-4 w-4 print:h-3 print:w-3 text-blue-600 border-gray-300 focus:ring-blue-500 print:m-0">
+                    <span class="text-sm print:text-[9px] font-bold">Attendance</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="radio" name="infraction_category" value="Behavior" class="h-4 w-4 print:h-3 print:w-3 text-blue-600 border-gray-300 focus:ring-blue-500 print:m-0">
+                    <span class="text-sm print:text-[9px] font-bold">Behavior</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="radio" name="infraction_category" value="Performance" class="h-4 w-4 print:h-3 print:w-3 text-blue-600 border-gray-300 focus:ring-blue-500 print:m-0">
+                    <span class="text-sm print:text-[9px] font-bold">Performance</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="radio" name="infraction_category" value="Other" class="h-4 w-4 print:h-3 print:w-3 text-blue-600 border-gray-300 focus:ring-blue-500 print:m-0">
+                    <span class="text-sm print:text-[9px] font-bold">Other</span>
+                </label>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 print:grid-cols-2 gap-6 print:gap-x-6 print:gap-y-2 mt-4 print:mt-2">
+                <!-- Dynamic Dropdown Container -->
+                <div id="specific-infraction-container" class="w-full">
+                    <label class="font-bold text-sm print:text-[8px] text-gray-600 uppercase mb-2 print:mb-1 block">Specific Infraction</label>
+                    <select id="infraction-select" class="w-full border-2 border-gray-300 py-2 px-3 print:py-1 print:px-1 rounded print:rounded-none bg-gray-50 print:bg-transparent focus:bg-white text-sm print:text-[9px] opacity-50 cursor-not-allowed" disabled>
+                        <option value="" disabled selected>Select a category first...</option>
+                    </select>
+                </div>
+
+                <!-- Violation Number Dropdown -->
+                <div id="violation-number-container" class="w-full">
+                    <label class="font-bold text-sm print:text-[8px] text-gray-600 uppercase mb-2 print:mb-1 block">Violation Number</label>
+                    <select id="violation-select" class="w-full border-2 border-gray-300 py-2 px-3 print:py-1 print:px-1 rounded print:rounded-none bg-gray-50 print:bg-transparent focus:bg-white text-sm print:text-[9px] opacity-50 cursor-not-allowed" disabled>
+                        <option value="" disabled selected>Select specific infraction first...</option>
+                        <option value="0">1st Violation in Infraction Category</option>
+                        <option value="1">2nd Violation in Infraction Category</option>
+                        <option value="2">3rd Violation in Infraction Category</option>
+                        <option value="3">4th Violation in Infraction Category</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Description of Issue -->
+        <div class="mb-6 print:mb-2">
+            <h3 class="font-bold text-lg print:text-[10px] text-gray-800 mb-2 print:mb-0.5">Description of Issue</h3>
+            <p class="text-xs print:text-[7.5px] text-gray-600 mb-2 print:mb-1 italic">Provide a detailed description. If this is a policy and/or procedure violation, you must cite the specific Handbook section, Policy, Procedure, Protocol, or SOP violated.</p>
+            
+            <!-- Screen View Textarea -->
+            <textarea id="desc-textarea" class="w-full min-h-[6rem] border-2 border-gray-300 rounded p-3 bg-gray-50 focus:bg-white print:hidden resize-none overflow-hidden" placeholder="Enter details here..."></textarea>
+            
+            <!-- Print View Div (Perfectly mimics textarea but auto-expands naturally) -->
+            <div id="desc-print-div" class="hidden print:block w-full min-h-[2rem] border border-gray-600 bg-transparent p-[4px] whitespace-pre-wrap break-words text-[9px] leading-[1.2]"></div>
+        </div>
+
+        <!-- Corrective Action Requirements (Dynamic) -->
+        <div id="corrective-action-container" class="hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-6 print:gap-x-6 print:gap-y-2 mb-6 print:mb-2">
+                <div class="flex flex-col w-full">
+                    <label class="font-bold text-sm print:text-[8px] text-gray-800 mb-1 print:mb-0.5">Time Frame for Improvement</label>
+                    <p class="text-xs print:text-[7.5px] text-gray-600 mb-2 print:mb-1 italic">Required for Performance Improvement Plans (PIPs).</p>
+                    <input type="text" class="w-full border-b-2 border-gray-300 py-1 print:py-0 bg-gray-50 focus:bg-white" placeholder="e.g., Immediate and ongoing, 30 days, etc.">
+                </div>
+                <div class="flex flex-col w-full">
+                    <label class="font-bold text-sm print:text-[8px] text-gray-800 mb-1 print:mb-0.5">Exact Consequences of Failure to Improve</label>
+                    <p class="text-xs print:text-[7.5px] text-gray-600 mb-2 print:mb-1 italic">Required for Performance Improvement Plans (PIPs).</p>
+                    <input type="text" class="w-full border-b-2 border-gray-300 py-1 print:py-0 bg-gray-50 focus:bg-white" placeholder="e.g., Suspension, Termination, etc.">
+                </div>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="bg-gray-100 print:bg-transparent p-4 print:p-2 border-l-4 print:border-l-2 print:border-gray-400 border-gray-600 mb-6 print:mb-2 print-border">
+            <p class="text-sm print:text-[8px] text-gray-800 leading-relaxed font-semibold">
+                This written warning form is to bring to your attention the severity of ongoing deficiencies in your behavior, attendance, conduct and/or performance. The intent is to define for you the seriousness of the situation so that you may take immediate corrective action. Failure to correct this behavior and/or further violation of County policy may result in additional disciplinary action up to and including termination.
+            </p>
+            <p class="text-sm print:text-[8px] text-gray-800 leading-relaxed mt-2 print:mt-1">
+                The above has been discussed with me by my supervisor. I understand the contents and acknowledge and understand the corrective action required. I also acknowledge and understand the potential consequences of noncompliance. By signing below, you acknowledge that you have received this notice.
+            </p>
+        </div>
+
+        <!-- HR Consultation & Signatures -->
+        <div class="bg-gray-50 print:bg-transparent p-4 print:p-2 border border-gray-300 print:border-none rounded print:rounded-none mb-6 print:mb-2">
+            <label class="flex items-center space-x-2 mb-6 print:mb-3 cursor-pointer">
+                <input type="checkbox" class="h-4 w-4 print:h-3 print:w-3 text-blue-600 rounded border-gray-400 focus:ring-blue-500 print:m-0">
+                <span class="text-sm print:text-[9px] font-bold text-gray-800">HR has been consulted prior to issuing adverse action (Required for Suspensions, Demotions, and Terminations).</span>
+            </label>
+            <div class="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-x-12 print:gap-x-10 gap-y-8 print:gap-y-4">
+                <!-- Employee -->
+                <div>
+                    <div class="border-b border-black h-8 print:h-4 relative">
+                        <span class="absolute bottom-0.5 left-0 text-xs print:text-[7px] text-gray-500 print:text-gray-700 italic">(Does not necessarily mean agreement with action taken)</span>
+                    </div>
+                    <div class="flex justify-between mt-1 print:mt-0.5">
+                        <span class="font-bold text-sm print:text-[9px]">Employee's Signature</span>
+                        <span class="font-bold text-sm print:text-[9px]">Date</span>
+                    </div>
+                </div>
+
+                <!-- Issuing Manager/Supervisor -->
+                <div>
+                    <div class="border-b border-black h-8 print:h-4"></div>
+                    <div class="flex justify-between mt-1 print:mt-0.5">
+                        <span class="font-bold text-sm print:text-[9px]">Issuing Manager/Supervisor</span>
+                        <span class="font-bold text-sm print:text-[9px]">Date</span>
+                    </div>
+                </div>
+
+                <!-- Appointing Authority -->
+                <div>
+                    <div class="border-b border-black h-8 print:h-4"></div>
+                    <div class="flex justify-between mt-1 print:mt-0.5">
+                        <span class="font-bold text-sm print:text-[9px]">Appointing Authority (Director/Admin)</span>
+                        <span class="font-bold text-sm print:text-[9px]">Date</span>
+                    </div>
+                </div>
+
+                <!-- HR -->
+                <div>
+                    <div class="border-b border-black h-8 print:h-4"></div>
+                    <div class="flex justify-between mt-1 print:mt-0.5">
+                        <span class="font-bold text-sm print:text-[9px]">Human Resources</span>
+                        <span class="font-bold text-sm print:text-[9px]">Date</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employee Comments / Grievance / Appeal Section -->
+        <div id="appeal-section" class="border-t-2 border-gray-800 pt-4 print:pt-2">
+            <label class="flex items-start space-x-3 print:space-x-1.5 cursor-pointer">
+                <input type="checkbox" class="mt-1 print:mt-0 h-5 w-5 print:h-3 print:w-3 text-blue-600 rounded border-gray-400 focus:ring-blue-500 print:m-0">
+                <div class="text-sm print:text-[9px] text-gray-800 w-full">
+                    <span class="font-bold text-base print:text-[10px]">Employee Comments / Notice of Grievance or Appeal</span><br>
+                    <span class="inline-block mt-1 print:mt-0.5">Employee should check here and initial if submitting additional documentation: <input type="text" class="w-16 border-b border-gray-400 bg-transparent text-center print:text-[9px]" placeholder="Initials">.</span><br>
+                    <span class="italic text-gray-600 print:text-gray-800 print:text-[8px] block mt-1 print:mt-0.5">Employee comments, or formal documentation initiating a Grievance/Complaint (Appendix D) or Appeal (Section 801), may be written on the back of this form or submitted as an attachment.</span>
+                    <span class="font-bold text-red-600 italic print:text-[8px] block mt-1 print:mt-0.5">Notice: You have exactly fourteen (14) calendar days to appeal severe actions (demotions, suspensions of 5+ days, or terminations) per Section 802.</span>
+                </div>
+            </label>
+        </div>
+
+    </div>
+
+    <!-- Dropdown & Auto-Resize Logic -->
+    <script>
+        // Auto-resize Textarea for screen, and sync to print-div for perfect printed height
+        const descTextarea = document.getElementById('desc-textarea');
+        const descPrintDiv = document.getElementById('desc-print-div');
+        
+        function syncAndResizeTextarea() {
+            // Resize screen textarea
+            descTextarea.style.setProperty('height', 'auto', 'important');
+            descTextarea.style.setProperty('height', descTextarea.scrollHeight + 'px', 'important');
+            
+            // Sync text directly to the print div (divs auto-expand naturally in print without bugs)
+            descPrintDiv.textContent = descTextarea.value;
+        }
+
+        // Add event listener for user typing
+        descTextarea.addEventListener('input', syncAndResizeTextarea);
+
+        // Introductory Period Toggle Logic
+        const introPeriodCheckbox = document.getElementById('intro-period-checkbox');
+        const appealSection = document.getElementById('appeal-section');
+
+        introPeriodCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                appealSection.classList.add('hidden');
+                appealSection.classList.add('print:hidden-for-space'); /* Prevent print render too */
+            } else {
+                appealSection.classList.remove('hidden');
+                appealSection.classList.remove('print:hidden-for-space');
+            }
+        });
+
+        const infractionsData = {
+            "Attendance": [
+                { name: "Exceeding the monthly allotted number of occurrences. (1 minute to 59 minutes = 1/2 an occurrence) (60 minutes or more equals a full occurrence)", actions: ["VW", "WW", "S", "T"] },
+                { name: "Leaving work premises, assigned station, or designated area during work hours without obtaining permission from a supervisor", actions: ["VW", "WW", "S", "T"] },
+                { name: "Working unauthorized time", actions: ["VW", "WW", "S", "T"] },
+                { name: "Not returning to work in a timely manner following a break/lunch period", actions: ["VW", "WW", "S", "T"] },
+                { name: "Not following department guidelines concerning notification of an absence", actions: ["VW", "WW", "S", "T"] },
+                { name: "Being absent for three or more days without notification or permission (also referred to as a voluntary quit or job abandonment)", actions: ["T", "", "", ""] },
+                { name: "Violating timecard procedures", actions: ["VW", "S", "T", ""] },
+                { name: "Falsifying company timecards, in any way (case by case basis)", actions: ["S/T", "", "", ""] }
+            ],
+            "Behavior": [
+                { name: "Inappropriate use of County computer or electronics", actions: ["VW", "WW", "S", "T"] },
+                { name: "Sharing or requesting someone's password", actions: ["S", "T", "", ""] },
+                { name: "Inappropriate access to County buildings, County systems, or County files", actions: ["S", "T", "", ""] },
+                { name: "Pornography in Workplace on Personal Device", actions: ["WW", "S", "T", ""] },
+                { name: "Pornography in Workplace on County Equipment", actions: ["T", "", "", ""] },
+                { name: "Excessive personal, inappropriate, or non business use of County property", actions: ["VW", "WW", "S", "T"] },
+                { name: "Unauthorized and willful destruction of County property", actions: ["S", "T", "", ""] },
+                { name: "Theft of County property or theft in the workplace", actions: ["T", "", "", ""] },
+                { name: "Unprofessionalism", actions: ["VW", "WW", "S", "T"] },
+                { name: "Insubordination", actions: ["WW", "S", "T", ""] },
+                { name: "Difficulty getting along with others", actions: ["VW", "WW", "S", "T"] },
+                { name: "Bullying, Harassing, or Intimidating a co-worker or County Business Partners", actions: ["WW", "S", "T", ""] },
+                { name: "Safety violation or gross negligence resulting in a safety hazard(s) or contributing to unsafe workplace conditions", actions: ["WW", "S", "T", ""] },
+                { name: "Failure to report workplace hazard(s)", actions: ["VW", "WW", "S", "T"] },
+                { name: "Possession of weapon(s) in the workplace, on County property or in a County vehicle in violation of policy", actions: ["T", "", "", ""] },
+                { name: "Physically fighting, violent behavior or threat of violence in the workplace or toward another County employee or business/community", actions: ["WW", "S", "T", ""] },
+                { name: "False information on employment application", actions: ["S", "T", "", ""] },
+                { name: "False request for reimbursement", actions: ["S", "T", "", ""] },
+                { name: "Willful falsification of any County or County related document/report", actions: ["S", "T", "", ""] },
+                { name: "Conflict of Interest violation", actions: ["VW", "WW", "S", "T"] },
+                { name: "P-Card misuse", actions: ["WW", "S", "T", ""] },
+                { name: "Falsification of Records Related to a Criminal Conviction", actions: ["T", "", "", ""] },
+                { name: "Possession of illegal drugs and/or alcohol in the work place, on County property, or in a County vehicle", actions: ["S", "T", "", ""] },
+                { name: "Positive drug or alcohol screen", actions: ["S", "T", "", ""] },
+                { name: "Failure to Submit a Screen Sample or Blood Alcohol Content - Reference Handbook Section 106", actions: ["Contact HR", "", "", ""] },
+                { name: "HIPAA Violation", actions: ["VW", "WW", "S", "T"] },
+                { name: "Inappropriate use of access to information", actions: ["WW", "S", "T", ""] },
+                { name: "Sharing confidential information with individuals who do not have a business need to know", actions: ["VW", "WW", "S", "T"] },
+                { name: "Disclosing confidential records or information without approval including employee records and County information", actions: ["WW", "S", "T", ""] },
+                { name: "Accessing/changing personal record for gain", actions: ["S", "T", "", ""] },
+                { name: "Retaliation resulting in adverse action", actions: ["S", "T", "", ""] },
+                { name: "Excessive use of personal cell phones", actions: ["VW", "WW", "S", "T"] },
+                { name: "Distracted driving and or speeding in a company vehicle", actions: ["WW", "S", "T", ""] },
+                { name: "Failing to use seat belt in County owned vehicle or in personal vehicle while conducting County business", actions: ["VW", "WW", "S", "T"] },
+                { name: "The use of tobacco, non-tobacco and products designed and used as a substitute for a tobacco product - in violation of County policy", actions: ["VW", "WW", "S", "T"] },
+                { name: "Violation of Social Media policy", actions: ["VW", "WW", "S", "T"] },
+                { name: "Violation of business expense policy", actions: ["VW", "WW", "S", "T"] },
+                { name: "Violation of fraternization policy", actions: ["WW", "S", "T", ""] },
+                { name: "Recording conversations in the workplace", actions: ["VW", "WW", "S", "T"] },
+                { name: "Loitering or loafing while on duty", actions: ["VW", "WW", "S", "T"] },
+                { name: "Dress code violation", actions: ["VW", "WW", "S", "T"] },
+                { name: "Acting negligently", actions: ["VW", "WW", "S", "T"] },
+                { name: "Engaging in horseplay that results in personal injury or equipment damage", actions: ["VW", "WW", "S", "T"] },
+                { name: "Engaging in vulgar or abusive language or conduct toward others", actions: ["WW", "S", "T", ""] },
+                { name: "Copying County documents for personal use", actions: ["WW", "S", "T", ""] },
+                { name: "Using facility communication systems in violation of company policy", actions: ["VW", "WW", "S", "T"] },
+                { name: "Dishonesty, including deception, fraud, lying, cheating, or conduct unbecoming of a County employee", actions: ["WW", "S", "T", ""] },
+                { name: "Soliciting gifts or tips from business-related contacts.", actions: ["VW", "WW", "S", "T"] },
+                { name: "Failure to report sexual misconduct or gender discrimination in violation of Title VI", actions: ["WW", "S", "T", ""] },
+                { name: "Demonstrating gross misconduct or other serious violations of County policies or procedures.", actions: ["S", "T", "", ""] },
+                { name: "Failure to report arrest per Handbook guidelines", actions: ["S", "T", "", ""] },
+                { name: "Committing a misdemeanor/felony related to position", actions: ["S", "T", "", ""] },
+                { name: "Concealing poor or defective work.", actions: ["VW", "WW", "S", "T"] }
+            ],
+            "Performance": [
+                { name: "Sleeping on the job", actions: ["VW", "WW", "S", "T"] },
+                { name: "Not meeting performance goals", actions: ["VW", "WW/PIP", "S", "T"] },
+                { name: "Poor customer service", actions: ["VW", "WW/PIP", "S", "T"] },
+                { name: "Failure to meet deadlines or follow directions", actions: ["VW", "WW/PIP", "S", "T"] },
+                { name: "Inefficiency", actions: ["VW", "WW/PIP", "S", "T"] },
+                { name: "Incompetence/lack of skills necessary to perform the job", actions: ["VW", "WW/PIP", "S", "T"] },
+                { name: "Failure to meet conditions of employment or loss of certification, license, or other regulatory requirement(s)", actions: ["S", "T", "", ""] },
+                { name: "Failing to follow practices as needed for the specific job assignment", actions: ["VW", "WW", "S", "T"] },
+                { name: "Demonstrating insubordination (Case by case basis)", actions: ["S/T", "T", "", ""] }
+            ],
+            "Other": [
+                { name: "Violation of Nepotism policy", actions: ["WW", "S", "T", ""] },
+                { name: "Violation of animals in the workplace policy", actions: ["VW", "WW", "S", "T"] },
+                { name: "Disruptive behavior", actions: ["VW", "WW", "S", "T"] },
+                { name: "Violation of any other County rule or policy not specifically listed", actions: ["VW", "WW", "S", "T"] },
+                { name: "Violation of Departmental/Divisional policy", actions: ["VW", "WW", "S", "T"] },
+                { name: "Arrest or Indictment (Refer to Handbook Section 514) - If charge is violent in nature", actions: ["S", "S", "", ""] },
+                { name: "Arrest or Indictment (Refer to Handbook Section 514) - If charge is related to job", actions: ["S", "S", "", ""] },
+                { name: "Arrest or Indictment (Refer to Handbook Section 514) - If charge is not related to job", actions: ["S", "S", "", ""] },
+                { name: "Conviction of a felony", actions: ["T", "", "", ""] }
+            ]
+        };
+
+        const categoryRadios = document.querySelectorAll('input[name="infraction_category"]');
+        const infractionSelect = document.getElementById('infraction-select');
+        const violationSelect = document.getElementById('violation-select');
+
+        // Checkbox Elements
+        const chkVW = document.getElementById('action-vw');
+        const chkWW = document.getElementById('action-ww');
+        const chkPIP = document.getElementById('action-pip');
+        const chkS = document.getElementById('action-s');
+        const chkDemotion = document.getElementById('action-demotion');
+        const chkT = document.getElementById('action-t');
+        const chkOther = document.getElementById('action-other');
+        const textOther = document.getElementById('action-other-text');
+        
+        const correctiveActionContainer = document.getElementById('corrective-action-container');
+
+        // Manual Override Logic for "Other Action"
+        chkOther.addEventListener('change', function() {
+            if (this.checked) {
+                // Clear all auto-selected boxes when manual override is engaged
+                chkVW.checked = false;
+                chkWW.checked = false;
+                chkPIP.checked = false;
+                chkS.checked = false;
+                chkDemotion.checked = false;
+                chkT.checked = false;
+                correctiveActionContainer.classList.add('hidden');
+                textOther.focus();
+            }
+        });
+
+        function clearActionCheckboxes() {
+            chkVW.checked = false;
+            chkWW.checked = false;
+            chkPIP.checked = false;
+            chkS.checked = false;
+            chkDemotion.checked = false;
+            chkT.checked = false;
+            chkOther.checked = false;
+            textOther.value = "";
+            correctiveActionContainer.classList.add('hidden');
+        }
+
+        function updateActionLevel() {
+            clearActionCheckboxes();
+            
+            const categoryElement = document.querySelector('input[name="infraction_category"]:checked');
+            const infractionIndex = infractionSelect.value;
+            const violationIndex = violationSelect.value;
+
+            if (!categoryElement || infractionIndex === "" || violationIndex === "") return;
+
+            const selectedCategory = categoryElement.value;
+            const infractionObj = infractionsData[selectedCategory][infractionIndex];
+            const actionString = infractionObj.actions[violationIndex];
+
+            if (!actionString) {
+                chkOther.checked = true;
+                textOther.value = "No strict matrix action defined for this violation level. Consult HR.";
+                return;
+            }
+
+            // Parse actions like "WW/PIP" or "S/T"
+            const actionCodes = actionString.split("/");
+            actionCodes.forEach(code => {
+                const c = code.trim();
+                if (c === "VW" || c === "V") chkVW.checked = true;
+                if (c === "WW") chkWW.checked = true;
+                if (c === "PIP") chkPIP.checked = true;
+                if (c === "S") chkS.checked = true;
+                if (c === "T") chkT.checked = true;
+                if (c === "Contact HR") {
+                    chkOther.checked = true;
+                    textOther.value = "Contact HR";
+                }
+            });
+
+            // Ensure PIP is checked for Performance Category Written Warnings
+            if (selectedCategory === "Performance" && chkWW.checked) {
+                chkPIP.checked = true;
+            }
+
+            // Dynamically show the Improvement Timeframe/Consequences only when PIP is selected
+            if (chkPIP.checked) {
+                correctiveActionContainer.classList.remove('hidden');
+            }
+        }
+
+        categoryRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const selectedCategory = e.target.value;
+                const options = infractionsData[selectedCategory];
+                
+                // Enable the infraction dropdown
+                infractionSelect.disabled = false;
+                infractionSelect.classList.remove('opacity-50', 'cursor-not-allowed');
+                
+                // Reset violation dropdown and checkboxes
+                violationSelect.disabled = true;
+                violationSelect.classList.add('opacity-50', 'cursor-not-allowed');
+                violationSelect.value = "";
+                clearActionCheckboxes();
+                
+                // Clear and populate infraction options
+                infractionSelect.innerHTML = '<option value="" disabled selected>Select an infraction...</option>';
+                options.forEach((infraction, index) => {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = index;
+                    optionElement.textContent = infraction.name;
+                    infractionSelect.appendChild(optionElement);
+                });
+            });
+        });
+
+        infractionSelect.addEventListener('change', () => {
+            // Enable the violation dropdown
+            violationSelect.disabled = false;
+            violationSelect.classList.remove('opacity-50', 'cursor-not-allowed');
+            violationSelect.value = "";
+            clearActionCheckboxes();
+        });
+
+        violationSelect.addEventListener('change', updateActionLevel);
+    </script>
+</body>
+</html>

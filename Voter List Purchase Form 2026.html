@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter List Purchase Form - Hamilton County Election Commission</title>
+    <style>
+        /* Form Base Web Styles */
+        body {
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #111827;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .print-bar {
+            background-color: #1e40af;
+            color: white;
+            padding: 12px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .print-bar-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .print-bar-title {
+            font-weight: bold;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .print-bar-btn {
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(22, 163, 74, 0.3);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .print-bar-btn:hover {
+            background-color: #15803d;
+            box-shadow: 0 4px 8px rgba(22, 163, 74, 0.4);
+        }
+
+        .vlf-form-container {
+            max-width: 800px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            padding: 35px 40px;
+            box-sizing: border-box;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+        
+        .vlf-header {
+            text-align: center;
+            border-bottom: 3px solid #1e40af;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+
+        .vlf-header h1 {
+            margin: 0 0 2px 0;
+            font-size: 20px;
+            color: #1e40af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .vlf-header h2 {
+            margin: 0;
+            font-size: 17px;
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .vlf-section {
+            margin-bottom: 14px;
+        }
+
+        .vlf-section-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 3px;
+            color: #1e40af;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .vlf-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .vlf-full-width {
+            grid-column: 1 / -1;
+        }
+
+        .vlf-form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .vlf-label {
+            font-weight: bold;
+            font-size: 12.5px;
+            color: #374151;
+            margin-bottom: 2px;
+        }
+
+        .vlf-write-in-line {
+            border-bottom: 1px solid #111827;
+            height: 24px;
+            width: 100%;
+            margin-bottom: 2px;
+        }
+
+        .vlf-checkbox-group {
+            display: inline-flex;
+            align-items: center;
+            font-size: 12.5px;
+            color: #111827;
+        }
+
+        .vlf-circle {
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            border: 1.5px solid #111827;
+            margin-right: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .vlf-square {
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            border: 1.5px solid #111827;
+            margin-right: 6px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .vlf-square.checked {
+            background-color: #1e40af;
+            border-color: #1e40af;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vlf-square.checked::after {
+            content: "✓";
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+            line-height: 1;
+            margin-top: -1px;
+        }
+
+        .vlf-box {
+            border: 1px solid #cbd5e1;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .vlf-callout {
+            background-color: #eff6ff;
+            border: 1.5px solid #bfdbfe;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .vlf-handwriting-lines {
+            margin-top: 2px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 2px 10px;
+            background-color: #ffffff;
+        }
+
+        .vlf-handwriting-line {
+            border-bottom: 1px dashed #cbd5e1;
+            height: 26px;
+        }
+
+        .vlf-handwriting-line:last-child {
+            border-bottom: none;
+        }
+
+        /* Prevent the normal browser print shortcut from printing the messy CMS view */
+        @media print {
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .print-hidden {
+                display: none !important;
+            }
+
+            .vlf-form-container {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                border-radius: 0 !important;
+            }
+
+            @page {
+                size: letter;
+                margin: 0.35in 0.45in;
+            }
+
+            .vlf-write-in-line {
+                border-bottom: 1px solid #000000 !important;
+            }
+
+            .vlf-handwriting-line {
+                border-bottom: 1px dashed #7f8c8d !important;
+            }
+
+            .vlf-box {
+                border: 1.5px solid #000000 !important;
+            }
+
+            .vlf-callout {
+                border: 2px solid #000000 !important;
+                background-color: transparent !important;
+            }
+
+            /* Fix color styling for print consistency */
+            .vlf-header h1, .vlf-section-title, .vlf-callout strong {
+                color: #000000 !important;
+            }
+
+            .vlf-header {
+                border-bottom: 3px solid #000000 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky action bar visible in the browser, hidden during printing -->
+    <div class="print-bar print-hidden">
+        <div class="print-bar-content">
+            <span class="print-bar-title">Hamilton County Voter List Purchase Form 2026</span>
+            <button class="print-bar-btn" onclick="window.print()">
+                🖨️ Print Blank Form
+            </button>
+        </div>
+    </div>
+
+    <div class="vlf-form-container">
+        
+        <!-- Header -->
+        <div class="vlf-header">
+            <h1>The Hamilton County Election Commission</h1>
+            <h2>Voter List Purchase Form</h2>
+        </div>
+        
+        <!-- Prominent Submission Instructions -->
+        <div class="vlf-callout">
+            <strong style="display: block; font-size: 15px; color: #1e40af; margin-bottom: 4px;">Please print and complete this form by hand, then mail or email to:</strong>
+            <div style="font-size: 13.5px; color: #1f2937;">
+                Hamilton County Election Commission<br>
+                700 River Terminal Road, Chattanooga, TN 37406<br>
+                Email: <a href="mailto:vote@hamiltontn.gov" style="color: #1e40af; font-weight: bold; text-decoration: underline;">vote@hamiltontn.gov</a>
+            </div>
+        </div>
+        
+        <!-- Requestor Information -->
+        <div class="vlf-section">
+            <div class="vlf-section-title">Requestor Information</div>
+            <div class="vlf-grid">
+                <div class="vlf-form-group vlf-full-width">
+                    <label class="vlf-label">Requestor's Name or Name of Agency/Group:</label>
+                    <div class="vlf-write-in-line"></div>
+                </div>
+                <div class="vlf-form-group vlf-full-width">
+                    <label class="vlf-label">Requestor's Address (Street, City, State, and Zip Code):</label>
+                    <div class="vlf-write-in-line"></div>
+                </div>
+                <div class="vlf-form-group">
+                    <label class="vlf-label">Requestor's Phone Number:</label>
+                    <div class="vlf-write-in-line"></div>
+                </div>
+                <div class="vlf-form-group">
+                    <label class="vlf-label">Email Address:</label>
+                    <div class="vlf-write-in-line"></div>
+                </div>
+                <div class="vlf-form-group vlf-box" style="background-color: #f8fafc; margin-top: 4px;">
+                    <label class="vlf-label" style="margin-bottom: 4px;">Is Requestor a TN Resident?</label>
+                    <div style="display: flex; gap: 32px; margin-top: 2px;">
+                        <span class="vlf-checkbox-group"><span class="vlf-circle"></span> Yes</span>
+                        <span class="vlf-checkbox-group"><span class="vlf-circle"></span> No</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Request Details & Certifications -->
+        <div class="vlf-section">
+            <div class="vlf-section-title">Order Details & Certifications</div>
+            <div class="vlf-grid">
+                
+                <!-- Political Certification -->
+                <div class="vlf-form-group vlf-full-width vlf-box" style="background-color: #fffbeb; border-color: #fde68a;">
+                    <label class="vlf-label" style="color: #92400e; margin-bottom: 6px;">Political Purposes Certification:</label>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <div class="vlf-checkbox-group">
+                            <span class="vlf-circle" style="border-color: #92400e;"></span>
+                            <span style="font-size: 13px; color: #111827;">I <strong>certify</strong> that the voter information I am purchasing with this order is for political purposes.</span>
+                        </div>
+                        <div class="vlf-checkbox-group">
+                            <span class="vlf-circle" style="border-color: #92400e;"></span>
+                            <span style="font-size: 13px; color: #111827;">I <strong>DO NOT certify</strong> that the voter information I am purchasing with this order is for political purposes.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Type of Request -->
+                <div class="vlf-form-group vlf-full-width">
+                    <label class="vlf-label">Type of Request:</label>
+                    <div class="vlf-checkbox-group vlf-box" style="background-color: #f1f5f9; display: flex; align-items: center;">
+                        <span class="vlf-square checked"></span>
+                        <span style="font-size: 13.5px; font-weight: bold; color: #0f172a; margin-left: 6px;">Electronic voter list - $42.00</span>
+                    </div>
+                </div>
+                
+                <!-- Description -->
+                <div class="vlf-form-group vlf-full-width">
+                    <label class="vlf-label">Description of Voter List Requested:</label>
+                    <div class="vlf-handwriting-lines">
+                        <div class="vlf-handwriting-line"></div>
+                        <div class="vlf-handwriting-line"></div>
+                        <div class="vlf-handwriting-line"></div>
+                        <div class="vlf-handwriting-line"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Terms and Signature -->
+        <div class="vlf-section" style="margin-top: 14px;">
+            <div style="background-color: #f9fafb; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 16px;">
+                <p style="font-size: 11px; color: #4b5563; font-weight: 500; text-align: justify; margin: 0; line-height: 1.45;">
+                    By signing and submitting this data order form, you understand that <strong>THERE ARE NO WARRANTIES</strong>. This means the Election Commission will not be responsible for any costs, including but not limited to those incurred as a result of lost profits or revenue, loss of use of the software, loss of data, the cost of recovering such data, or the cost of substitute software of claims by third parties. In no case shall the Election Commission liability exceed the amount of the purchase fee. Providing your own technical support is in the terms of this purchase. The Hamilton County Election Office will not provide technical computer support. You agree to pay the total amount due before this order is fulfilled and transmitted to you.
+                </p>
+                <p style="font-size: 11.5px; color: #1e40af; font-weight: bold; margin: 8px 0 0 0; text-align: center;">
+                    Please sign and date in the spaces below. Wet signatures are required.
+                </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 24px; align-items: flex-end;">
+                <div style="width: 65%;">
+                    <div class="vlf-write-in-line" style="border-bottom: 1.5px solid #111827; height: 32px;"></div>
+                    <div style="padding-top: 4px; text-align: center; font-weight: bold; font-size: 12.5px; color: #374151;">
+                        Signature of Requestor (Sign by Hand)
+                    </div>
+                </div>
+                <div style="width: 30%;">
+                    <div class="vlf-write-in-line" style="border-bottom: 1.5px solid #111827; height: 32px;"></div>
+                    <div style="padding-top: 4px; text-align: center; font-weight: bold; font-size: 12.5px; color: #374151;">
+                        Date
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

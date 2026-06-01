@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamilton County - 2026 Mileage Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Print Styles to guarantee a clean 1-page print in Chrome */
+        @media print {
+            @page {
+                size: letter portrait;
+                margin: 0.25in;
+            }
+            body {
+                background-color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-border-b {
+                border: none !important;
+                border-bottom: 1px solid #000 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                background-color: transparent !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+            .print-no-border {
+                border: none !important;
+                background-color: transparent !important;
+            }
+            .shadow-lg, .shadow-sm {
+                box-shadow: none !important;
+            }
+            .container {
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            input[type="date"]::-webkit-calendar-picker-indicator,
+            input[type="month"]::-webkit-calendar-picker-indicator {
+                display: none;
+                -webkit-appearance: none;
+            }
+        }
+
+        /* Standard styling for inputs */
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 1px #2563eb;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen py-8 print:py-0">
+
+    <!-- Action Bar (Hidden on Print) -->
+    <div class="max-w-4xl mx-auto mb-4 flex justify-between items-center no-print px-4">
+        <p class="text-sm text-gray-600 italic">Fill out the form below. Calculations are automatic. Click print when finished.</p>
+        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
+            Print / Save as PDF
+        </button>
+    </div>
+
+    <!-- Main Form Container -->
+    <div class="container max-w-4xl mx-auto bg-white p-10 print:p-2 print:border-none shadow-lg border border-gray-200">
+        
+        <!-- Header -->
+        <header class="text-center mb-8 print:mb-4">
+            <h1 class="text-2xl font-bold uppercase tracking-wide">Hamilton County</h1>
+            <h2 class="text-xl font-semibold uppercase mt-1">Mileage Report 2026</h2>
+        </header>
+
+        <!-- Employee & Account Info Section -->
+        <section class="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-x-8 gap-y-4 print:gap-y-2 mb-8 print:mb-4">
+            <div class="flex flex-col">
+                <label for="employeeName" class="text-sm font-semibold text-gray-700 uppercase mb-1">Employee Name</label>
+                <input type="text" id="employeeName" class="print-border-b border border-gray-300 rounded px-3 py-2 print:py-1 text-gray-800 focus:bg-white bg-gray-50 transition" placeholder="John Doe">
+            </div>
+            <div class="flex flex-col">
+                <label for="month" class="text-sm font-semibold text-gray-700 uppercase mb-1">Month / Year</label>
+                <input type="month" id="month" class="print-border-b border border-gray-300 rounded px-3 py-2 print:py-1 text-gray-800 focus:bg-white bg-gray-50 transition">
+            </div>
+            
+            <!-- IFAS Account span 2 columns, divided inside -->
+            <div class="md:col-span-2 print:col-span-2 border border-gray-300 p-4 print:p-0 print:border-none rounded bg-gray-50 print:bg-transparent">
+                <p class="text-sm font-semibold text-gray-700 uppercase mb-3 print:mb-1">IFAS Account</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-6 print:gap-4">
+                    <div class="flex items-center">
+                        <label for="ifasObject" class="text-sm text-gray-700 font-medium mr-3 whitespace-nowrap">Object:</label>
+                        <input type="text" id="ifasObject" value="53041" class="print-border-b border border-gray-300 rounded px-2 py-1 w-full text-gray-800 focus:bg-white bg-white">
+                    </div>
+                    <div class="flex items-center">
+                        <label for="ifasOrg" class="text-sm text-gray-700 font-medium mr-3 whitespace-nowrap">Organization:</label>
+                        <input type="text" id="ifasOrg" value="1010090" class="print-border-b border border-gray-300 rounded px-2 py-1 w-full text-gray-800 focus:bg-white bg-white">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trip Log Table -->
+        <section class="mb-6 print:mb-4">
+            <table class="w-full text-left border-collapse border border-gray-400">
+                <thead>
+                    <tr class="bg-gray-100 print:bg-gray-200">
+                        <th class="border border-gray-400 p-2 print:p-1 print:px-2 text-sm font-semibold text-gray-700 w-1/6">Date</th>
+                        <th class="border border-gray-400 p-2 print:p-1 print:px-2 text-sm font-semibold text-gray-700 w-3/5">Destination of Trips and Purpose</th>
+                        <th class="border border-gray-400 p-2 print:p-1 print:px-2 text-sm font-semibold text-gray-700 w-1/6 text-center">Miles Traveled</th>
+                        <th class="border border-gray-400 p-2 text-sm font-semibold text-gray-700 w-12 text-center no-print">Act</th>
+                    </tr>
+                </thead>
+                <tbody id="trip-body">
+                    <!-- Default initial rows generated by JS, see below -->
+                </tbody>
+            </table>
+            
+            <div class="mt-3 no-print">
+                <button type="button" onclick="addRow()" class="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    Add Row
+                </button>
+            </div>
+        </section>
+
+        <!-- Totals & Calculations Section -->
+        <section class="flex flex-col items-end mb-8 print:mb-4 text-right space-y-3 print:space-y-1">
+            <div class="flex items-center justify-end w-full md:w-1/2 print:w-1/2">
+                <label class="font-semibold text-gray-800 mr-4">Total Miles:</label>
+                <input type="text" id="total-miles" readonly class="print-no-border bg-gray-100 border border-gray-300 rounded px-3 py-1 w-32 text-right font-bold text-gray-800" value="0.0">
+            </div>
+            <div class="flex items-center justify-end w-full md:w-1/2 print:w-1/2">
+                <label class="font-semibold text-gray-800 mr-4 flex items-center">
+                    <input type="checkbox" checked disabled class="mr-2 h-4 w-4 text-blue-600 rounded border-gray-300">
+                    $0.725 per mile = $
+                </label>
+                <input type="text" id="total-reimbursement" readonly class="print-no-border bg-green-50 border border-green-300 rounded px-3 py-1 w-32 text-right font-bold text-green-800" value="$0.00">
+            </div>
+            <p class="text-xs text-gray-500 w-full md:w-1/2 print:w-1/2 mt-1">total reimbursement applied for.</p>
+        </section>
+
+        <!-- Certification & Signatures -->
+        <section>
+            <p class="text-sm text-gray-700 mb-8 print:mb-4 italic">
+                We certify that all the above travel was required in connection with the assigned duties of the named employee.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-x-12 gap-y-10 print:gap-y-6">
+                <!-- Employee Signature -->
+                <div class="flex items-end mt-2">
+                    <div class="flex-grow border-b border-black relative h-10 print:h-6">
+                        <span class="absolute -bottom-5 text-xs text-gray-600 uppercase">Employee's Signature</span>
+                    </div>
+                    <div class="w-32 border-b border-black relative h-10 print:h-6 ml-6">
+                        <span class="absolute -bottom-5 text-xs text-gray-600 uppercase">Date</span>
+                    </div>
+                </div>
+
+                <!-- Supervisor / Approval Signature -->
+                <div class="flex items-end mt-2">
+                    <div class="flex-grow border-b border-black relative h-10 print:h-6">
+                        <span class="absolute -bottom-5 text-xs text-gray-600 uppercase">Approved By</span>
+                    </div>
+                    <div class="w-32 border-b border-black relative h-10 print:h-6 ml-6">
+                        <span class="absolute -bottom-5 text-xs text-gray-600 uppercase">Date</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JavaScript for dynamic functionality -->
+    <script>
+        const REIMBURSEMENT_RATE = 0.725;
+        const DEFAULT_ROWS = 8; // Start with 8 empty rows to fill standard page space nicely
+
+        // Initialize Table
+        window.onload = function() {
+            for(let i=0; i<DEFAULT_ROWS; i++) {
+                addRow();
+            }
+        };
+
+        // Add a new row to the table
+        function addRow() {
+            const tbody = document.getElementById('trip-body');
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-gray-50 transition-colors group';
+
+            tr.innerHTML = `
+                <td class="border border-gray-400 p-0">
+                    <input type="text" placeholder="MM/DD" class="w-full h-full px-2 py-2 print:py-1 print-no-border bg-transparent outline-none text-sm focus:bg-blue-50">
+                </td>
+                <td class="border border-gray-400 p-0">
+                    <input type="text" class="w-full h-full px-2 py-2 print:py-1 print-no-border bg-transparent outline-none text-sm focus:bg-blue-50">
+                </td>
+                <td class="border border-gray-400 p-0">
+                    <input type="number" step="0.1" min="0" class="miles-input w-full h-full px-2 py-2 print:py-1 text-center print-no-border bg-transparent outline-none text-sm focus:bg-blue-50">
+                </td>
+                <td class="border border-gray-400 p-0 text-center no-print">
+                    <button type="button" onclick="deleteRow(this)" class="text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity p-1" title="Delete Row">
+                        <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        // Delete a specific row
+        function deleteRow(button) {
+            const tbody = document.getElementById('trip-body');
+            // Ensure at least 1 row remains
+            if (tbody.children.length > 1) {
+                const tr = button.closest('tr');
+                tr.remove();
+                calculateTotals(); // Recalculate after deleting
+            }
+        }
+
+        // Event Delegation for automatic calculation when miles are typed
+        document.getElementById('trip-body').addEventListener('input', function(e) {
+            if (e.target.classList.contains('miles-input')) {
+                calculateTotals();
+            }
+        });
+
+        // Main Calculation Logic
+        function calculateTotals() {
+            let totalMiles = 0;
+            const mileInputs = document.querySelectorAll('.miles-input');
+            
+            mileInputs.forEach(input => {
+                const value = parseFloat(input.value);
+                if (!isNaN(value) && value > 0) {
+                    totalMiles += value;
+                }
+            });
+
+            // Update Total Miles Field
+            document.getElementById('total-miles').value = totalMiles.toFixed(1);
+
+            // Calculate and Update Total Reimbursement Field
+            const reimbursement = totalMiles * REIMBURSEMENT_RATE;
+            
+            // Format currency
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+            });
+            
+            document.getElementById('total-reimbursement').value = formatter.format(reimbursement);
+        }
+    </script>
+</body>
+</html>

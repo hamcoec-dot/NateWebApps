@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Purchase Order — Hamilton County Election Commission</title>
+  <meta name="description" content="Paperless purchase order form for HCEC clerks. Save as PDF, manage vendors and ship-to locations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===================== APP SHELL ===================== -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <header class="topbar" role="banner">
+    <div class="topbar-brand">
+      <svg class="brand-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+        <rect x="9" y="3" width="6" height="4" rx="1"/>
+        <line x1="9" y1="12" x2="15" y2="12"/>
+        <line x1="9" y1="16" x2="13" y2="16"/>
+      </svg>
+      <span class="brand-name">HCEC Purchase Orders</span>
+    </div>
+    <nav class="topbar-nav" role="navigation" aria-label="Main navigation">
+      <button id="btn-new" class="nav-btn nav-btn--primary" aria-label="Create new purchase order">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Order
+      </button>
+      <button id="btn-orders" class="nav-btn" aria-label="View saved drafts">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        Drafts
+      </button>
+      <button id="btn-vendors" class="nav-btn" aria-label="Manage vendors">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"/><path d="M3 21h18"/><path d="M9 21v-4a2 2 0 012-2h2a2 2 0 012 2v4"/></svg>
+        Vendors
+      </button>
+      <button id="btn-shipto" class="nav-btn" aria-label="Manage ship-to locations">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>
+        Ship-To
+      </button>
+      <button id="btn-clerks" class="nav-btn" aria-label="Manage clerks">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Clerks
+      </button>
+      <button id="btn-analytics" class="nav-btn nav-btn--analytics" aria-label="View order history and analytics">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/><path d="M7 15h2M13 15h4M7 18h2M13 18h4"/></svg>
+        Analytics
+      </button>
+      <button id="btn-sync" class="nav-btn nav-btn--sync" aria-label="Cloud / LAN Sync Settings">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 11-.57-8.38l5.67-5.67"/></svg>
+        <span id="sync-status-text">Local Only</span>
+      </button>
+      <button id="btn-print" class="nav-btn nav-btn--accent" aria-label="Save order as PDF via print dialog">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Save PDF
+      </button>
+    </nav>
+  </header>
+
+  <!-- STATUS BAR -->
+  <div id="status-bar" class="status-bar" role="status" aria-live="polite"></div>
+
+  <!-- ===================== MAIN FORM ===================== -->
+  <main id="form-view" class="form-view" role="main">
+    <form id="po-form" novalidate aria-label="Purchase Order Form">
+
+      <!-- FORM HEADER -->
+      <div class="po-header print-only-logo">
+        <div class="po-org">
+          <div class="po-org-name">Hamilton County Election Commission</div>
+          <div class="po-org-address">700 River Terminal Road · Chattanooga, TN 37406 · 423-209-8683</div>
+        </div>
+        <div class="po-title-block">
+          <div class="po-title-row" style="display: flex; align-items: center; justify-content: flex-end; gap: 0.75rem; margin-bottom: 0.75rem;">
+            <span id="po-status-badge" class="po-status-badge" style="display: none;">COMPLETED</span>
+            <div class="po-title" style="margin-bottom: 0;">PURCHASE REQUEST</div>
+          </div>
+          <div class="po-meta-grid">
+            <label for="po-number" class="meta-label">PO NUMBER</label>
+            <input id="po-number" name="poNumber" type="text" class="meta-input" readonly aria-label="Purchase order number (auto-generated)" />
+            <label for="po-date" class="meta-label">DATE</label>
+            <input id="po-date" name="poDate" type="date" class="meta-input" aria-label="Purchase order date" required />
+            <label for="po-requested-by" class="meta-label">REQUESTED BY</label>
+            <select id="po-requested-by" name="requestedBy" class="meta-input" aria-label="Clerk requesting this order" required>
+              <option value="">— Select Clerk —</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- VENDOR + SHIP-TO BLOCK -->
+      <div class="po-parties">
+        <div class="party-block">
+          <div class="party-header">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"/><path d="M3 21h18"/></svg>
+            VENDOR
+          </div>
+          <div class="party-select-row">
+            <label for="vendor-select" class="sr-only">Select vendor</label>
+            <select id="vendor-select" name="vendorId" aria-label="Select vendor" required>
+              <option value="">— Select Vendor —</option>
+            </select>
+          </div>
+          <div class="party-address" id="vendor-address" aria-live="polite">
+            <div class="addr-name" id="v-name"></div>
+            <div class="addr-line" id="v-addr"></div>
+            <div class="addr-line" id="v-city"></div>
+            <div class="addr-line" id="v-phone"></div>
+            <div class="addr-line" id="v-other"></div>
+          </div>
+        </div>
+
+        <div class="party-block">
+          <div class="party-header">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>
+            SHIP TO
+          </div>
+          <div class="party-select-row">
+            <label for="shipto-select" class="sr-only">Select ship-to location</label>
+            <select id="shipto-select" name="shipToId" aria-label="Select ship-to location" required>
+              <option value="">— Select Ship-To —</option>
+            </select>
+          </div>
+          <div class="party-address" id="shipto-address" aria-live="polite">
+            <div class="addr-name" id="s-name"></div>
+            <div class="addr-line" id="s-line1"></div>
+            <div class="addr-line" id="s-org"></div>
+            <div class="addr-line" id="s-city"></div>
+            <div class="addr-line" id="s-phone"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LINE ITEMS TABLE -->
+      <div class="table-wrapper" role="region" aria-label="Line items">
+        <table id="items-table" class="items-table">
+          <thead>
+            <tr>
+              <th scope="col" class="col-item">ITEM #</th>
+              <th scope="col" class="col-desc">DESCRIPTION</th>
+              <th scope="col" class="col-qty">QTY</th>
+              <th scope="col" class="col-price">UNIT PRICE</th>
+              <th scope="col" class="col-total">TOTAL</th>
+              <th scope="col" class="col-action no-print" aria-label="Row actions"></th>
+            </tr>
+          </thead>
+          <tbody id="items-body">
+            <!-- rows injected by JS -->
+          </tbody>
+        </table>
+      </div>
+      <div class="table-actions no-print">
+        <button type="button" id="btn-add-row" class="btn-add-row" aria-label="Add another line item">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Line
+        </button>
+      </div>
+
+      <!-- TOTALS + COMMENTS -->
+      <div class="po-footer">
+        <div class="comments-block" id="comments-container">
+          <label for="po-comments" class="comments-label">COMMENTS / SPECIAL INSTRUCTIONS</label>
+          <textarea id="po-comments" name="comments" class="comments-area" rows="4" aria-label="Comments or special instructions"></textarea>
+          <div id="comments-preview" class="comments-preview" tabindex="0" aria-label="Click to edit comments" role="textbox"></div>
+          <label for="po-salesrep" class="comments-label" style="margin-top:0.75rem">SALES REP</label>
+          <input id="po-salesrep" name="salesRep" type="text" class="comments-input" aria-label="Sales representative name or contact" />
+        </div>
+
+        <div class="totals-block" role="group" aria-label="Order totals">
+          <div class="totals-row">
+            <span class="totals-label">SUBTOTAL</span>
+            <span id="t-subtotal" class="totals-value" aria-label="Subtotal">$0.00</span>
+          </div>
+          <div class="totals-row">
+            <label for="t-tax-input" class="totals-label">TAX</label>
+            <div class="totals-input-wrap">
+              <span class="currency-prefix">$</span>
+              <input id="t-tax-input" name="tax" type="number" step="0.01" min="0" value="0" class="totals-input" aria-label="Tax amount" />
+            </div>
+          </div>
+          <div class="totals-row">
+            <label for="t-other-input" class="totals-label">OTHER</label>
+            <div class="totals-input-wrap">
+              <span class="currency-prefix">$</span>
+              <input id="t-other-input" name="other" type="number" step="0.01" min="0" value="0" class="totals-input" aria-label="Other charges" />
+            </div>
+          </div>
+          <div class="totals-row totals-row--grand">
+            <span class="totals-label">TOTAL</span>
+            <span id="t-grand" class="totals-value" aria-label="Grand total">$0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAVE DRAFT BUTTON (hidden on print) -->
+      <div class="form-actions no-print">
+        <button type="button" id="btn-save-draft" class="btn-save-draft" aria-label="Save this order as a draft">Save Draft</button>
+      </div>
+
+    </form>
+
+    <!-- PRINT FOOTER (visible on print only) -->
+    <div class="print-footer print-only">
+      <p>If you have any questions about this purchase request, please contact Sara Goodrich · 423-209-8695 · sarag@hamiltontn.gov</p>
+      <p>Please give a copy to Sara.</p>
+    </div>
+  </main>
+
+</div><!-- #app -->
+
+<!-- ===================== MODAL BACKDROP ===================== -->
+<div id="modal-backdrop" class="modal-backdrop" role="presentation" aria-hidden="true"></div>
+
+<!-- ===================== DRAFTS MODAL ===================== -->
+<dialog id="modal-drafts" class="modal" aria-labelledby="drafts-title">
+  <div class="modal-header">
+    <h2 id="drafts-title" class="modal-title">Saved Drafts</h2>
+    <button class="modal-close" aria-label="Close drafts panel" data-close="modal-drafts">✕</button>
+  </div>
+  <div class="modal-body" id="drafts-list">
+    <p class="empty-state">No saved drafts yet.</p>
+  </div>
+</dialog>
+
+<!-- ===================== VENDORS MODAL ===================== -->
+<dialog id="modal-vendors" class="modal modal--wide" aria-labelledby="vendors-title">
+  <div class="modal-header">
+    <h2 id="vendors-title" class="modal-title">Manage Vendors</h2>
+    <button class="modal-close" aria-label="Close vendors panel" data-close="modal-vendors">✕</button>
+  </div>
+  <div class="modal-body">
+    <div id="vendors-list" class="record-list"></div>
+    <div class="modal-section-title">Add / Edit Vendor</div>
+    <form id="vendor-form" class="record-form" novalidate aria-label="Vendor entry form">
+      <input type="hidden" id="vendor-edit-id" />
+      <div class="form-grid">
+        <label for="vf-name">Name <span aria-hidden="true">*</span></label>
+        <input id="vf-name" type="text" required aria-label="Vendor name" placeholder="Vendor Name" />
+        <label for="vf-addr">Street Address</label>
+        <input id="vf-addr" type="text" aria-label="Vendor street address" placeholder="123 Main St" />
+        <label for="vf-city">City, State, Zip</label>
+        <input id="vf-city" type="text" aria-label="Vendor city, state and zip" placeholder="Chattanooga, TN 37406" />
+        <label for="vf-phone">Phone</label>
+        <input id="vf-phone" type="tel" aria-label="Vendor phone number" placeholder="(423) 000-0000" />
+        <label for="vf-other">Other Info</label>
+        <input id="vf-other" type="text" aria-label="Other vendor information" placeholder="Contact name, email, etc." />
+      </div>
+      <div class="record-form-actions">
+        <button type="submit" class="btn-primary" id="vendor-save-btn">Save Vendor</button>
+        <button type="button" id="vendor-cancel-btn" class="btn-secondary">Cancel Edit</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ===================== SHIP-TO MODAL ===================== -->
+<dialog id="modal-shipto" class="modal modal--wide" aria-labelledby="shipto-title">
+  <div class="modal-header">
+    <h2 id="shipto-title" class="modal-title">Manage Ship-To Locations</h2>
+    <button class="modal-close" aria-label="Close ship-to panel" data-close="modal-shipto">✕</button>
+  </div>
+  <div class="modal-body">
+    <div id="shipto-list" class="record-list"></div>
+    <div class="modal-section-title">Add / Edit Ship-To</div>
+    <form id="shipto-form" class="record-form" novalidate aria-label="Ship-to location entry form">
+      <input type="hidden" id="shipto-edit-id" />
+      <div class="form-grid">
+        <label for="sf-name">Contact Name <span aria-hidden="true">*</span></label>
+        <input id="sf-name" type="text" required aria-label="Ship-to contact name" placeholder="Full Name" />
+        <label for="sf-org">Organization</label>
+        <input id="sf-org" type="text" aria-label="Organization name" placeholder="Hamilton County Election Commission" />
+        <label for="sf-addr">Street Address</label>
+        <input id="sf-addr" type="text" aria-label="Ship-to street address" placeholder="700 River Terminal Road" />
+        <label for="sf-city">City, State, Zip</label>
+        <input id="sf-city" type="text" aria-label="Ship-to city, state and zip" placeholder="Chattanooga, TN 37406" />
+        <label for="sf-phone">Phone</label>
+        <input id="sf-phone" type="tel" aria-label="Ship-to phone number" placeholder="423-209-8683" />
+      </div>
+      <div class="record-form-actions">
+        <button type="submit" class="btn-primary" id="shipto-save-btn">Save Location</button>
+        <button type="button" id="shipto-cancel-btn" class="btn-secondary">Cancel Edit</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ===================== CLERKS MODAL ===================== -->
+<dialog id="modal-clerks" class="modal" aria-labelledby="clerks-title">
+  <div class="modal-header">
+    <h2 id="clerks-title" class="modal-title">Manage Clerks</h2>
+    <button class="modal-close" aria-label="Close clerks panel" data-close="modal-clerks">✕</button>
+  </div>
+  <div class="modal-body">
+    <div id="clerks-list" class="record-list"></div>
+    <div class="modal-section-title">Add Clerk</div>
+    <form id="clerk-form" class="record-form" novalidate aria-label="Add clerk form">
+      <div class="form-grid form-grid--single">
+        <label for="cf-name">Full Name <span aria-hidden="true">*</span></label>
+        <input id="cf-name" type="text" required aria-label="Clerk full name" placeholder="First Last" />
+      </div>
+      <div class="record-form-actions">
+        <button type="submit" class="btn-primary">Add Clerk</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ===================== ANALYTICS MODAL ===================== -->
+<dialog id="modal-analytics" class="modal modal--analytics" aria-labelledby="analytics-title">
+  <div class="modal-header">
+    <h2 id="analytics-title" class="modal-title">Order History &amp; Analytics</h2>
+    <button class="modal-close" aria-label="Close analytics panel" data-close="modal-analytics">✕</button>
+  </div>
+  <div class="modal-body analytics-body" id="analytics-body">
+
+    <!-- KPI Row -->
+    <div class="kpi-row" id="analytics-kpis" aria-label="Key performance indicators"></div>
+
+    <!-- Spend Over Time -->
+    <div class="analytics-section">
+      <div class="analytics-section-header">
+        <h3 class="analytics-section-title">Spend Over Time</h3>
+        <div class="period-toggle" role="group" aria-label="Chart grouping period">
+          <button class="toggle-btn active" data-period="monthly" id="chart-period-monthly">Monthly</button>
+          <button class="toggle-btn" data-period="weekly" id="chart-period-weekly">Weekly</button>
+          <button class="toggle-btn" data-period="quarterly" id="chart-period-quarterly">Quarterly</button>
+        </div>
+      </div>
+      <div class="chart-wrap" role="img" aria-label="Spend over time bar chart">
+        <canvas id="analytics-chart"></canvas>
+        <div id="chart-tooltip" class="chart-tooltip" aria-hidden="true"></div>
+      </div>
+      <p class="chart-empty" id="chart-empty">Save some orders first to see spending trends.</p>
+    </div>
+
+    <!-- Breakdown -->
+    <div class="analytics-section">
+      <div class="analytics-section-header">
+        <h3 class="analytics-section-title">Breakdown</h3>
+        <div class="period-toggle" role="group" aria-label="Breakdown grouping">
+          <button class="toggle-btn active" data-breakdown="vendor" id="breakdown-by-vendor">By Vendor</button>
+          <button class="toggle-btn" data-breakdown="clerk" id="breakdown-by-clerk">By Clerk</button>
+        </div>
+      </div>
+      <div id="analytics-breakdown" class="breakdown-wrap"></div>
+    </div>
+
+    <!-- Order Log -->
+    <div class="analytics-section">
+      <div class="analytics-section-header">
+        <h3 class="analytics-section-title">Order Log</h3>
+      </div>
+      <div class="log-filters">
+        <input type="search" id="log-search" class="log-search-input" placeholder="Search PO #, vendor, clerk…" aria-label="Search order log" />
+        <select id="log-filter-vendor" class="log-filter-select" aria-label="Filter by vendor">
+          <option value="">All Vendors</option>
+        </select>
+        <select id="log-filter-clerk" class="log-filter-select" aria-label="Filter by clerk">
+          <option value="">All Clerks</option>
+        </select>
+      </div>
+      <div id="analytics-log" class="order-log-wrap" role="region" aria-label="Filtered order list"></div>
+    </div>
+
+  </div>
+</dialog>
+
+<!-- ===================== SYNC MODAL ===================== -->
+<dialog id="modal-sync" class="modal" aria-labelledby="sync-title">
+  <div class="modal-header">
+    <h2 id="sync-title" class="modal-title">Synchronization Status</h2>
+    <button class="modal-close" aria-label="Close sync panel" data-close="modal-sync">✕</button>
+  </div>
+  <div class="modal-body" style="padding: 1.5rem;">
+    
+    <!-- Active Status Indicator Card -->
+    <div style="display: flex; align-items: center; gap: 1rem; background: var(--c-accent-soft); padding: 1.15rem; border-radius: var(--r-md); margin-bottom: 1.5rem; border: 1.5px solid var(--c-accent-2);">
+      <div style="width: 14px; height: 14px; background: var(--c-success); border-radius: 50%; box-shadow: 0 0 12px var(--c-success); animation: pulseGreen 2s infinite ease-in-out;" aria-hidden="true"></div>
+      <div>
+        <div style="font-weight: 700; font-size: 0.95rem; color: var(--c-accent);">Automated Sync Active</div>
+        <div style="font-size: 0.78rem; color: var(--c-text-muted); margin-top: 0.2rem;">All orders, vendors, ship-tos, and clerks are synced in real-time.</div>
+      </div>
+    </div>
+
+    <!-- Explanation -->
+    <p style="font-size: 0.82rem; color: var(--c-text-muted); line-height: 1.6; margin-bottom: 1.5rem;">
+      The Hamilton County Election Commission purchase order system is automatically connected to a secure cloud database. Any changes to clerks, vendors, drafts, or ship-to locations sync immediately in the background across all terminals. 
+    </p>
+
+    <!-- Read-Only Info Table -->
+    <div style="background: var(--c-surface-2); border: 1.5px solid var(--c-border); border-radius: var(--r-md); padding: 1.15rem; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem;">
+      <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+        <span style="font-weight: 600; color: var(--c-text-muted);">Sync Protocol</span>
+        <span style="font-weight: 700; color: var(--c-accent);">Serverless Cloud Gist API</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-top: 1px solid var(--c-border); padding-top: 0.8rem;">
+        <span style="font-weight: 600; color: var(--c-text-muted);">Target Cloud ID</span>
+        <span id="sync-gist-display" style="font-family: monospace; font-size: 0.8rem; background: var(--c-surface); padding: 0.2rem 0.45rem; border-radius: 4px; border: 1.5px solid var(--c-border); color: var(--c-text);">Not Configured</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-top: 1px solid var(--c-border); padding-top: 0.8rem; align-items: center;">
+        <span style="font-weight: 600; color: var(--c-text-muted);">Connection Status</span>
+        <span style="font-weight: 700; color: var(--c-success); display: flex; align-items: center; gap: 0.25rem;">
+          <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Active
+        </span>
+      </div>
+    </div>
+
+    <!-- Close Button -->
+    <div style="display: flex; justify-content: flex-end;">
+      <button type="button" class="btn-secondary" data-close="modal-sync" style="font-weight: 700; padding: 0.5rem 1.5rem; font-size: 0.82rem; cursor: pointer; border-radius: var(--r-sm);">Close Status Dashboard</button>
+    </div>
+
+    <!-- HIDDEN BACKING FORM AND INPUTS TO PREVENT JS CRASHES -->
+    <div style="display: none !important;" aria-hidden="true">
+      <div class="sync-mode-toggle">
+        <button type="button" id="sync-mode-cloud" class="toggle-btn active">Cloud</button>
+        <button type="button" id="sync-mode-lan" class="toggle-btn">LAN</button>
+      </div>
+      <form id="sync-form">
+        <div id="sync-section-cloud">
+          <input id="sync-gist-id" type="text" />
+          <button type="button" id="btn-create-gist">Create</button>
+          <input id="sync-gist-token" type="password" />
+        </div>
+        <div id="sync-section-lan">
+          <input id="sync-url-input" type="url" />
+        </div>
+        <div id="sync-connection-status">Status</div>
+        <button type="button" id="btn-test-sync">Test</button>
+        <button type="submit">Save</button>
+      </form>
+    </div>
+
+  </div>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
