@@ -78,27 +78,42 @@ app.get('/api/config', (req, res) => {
   const LOCAL_CONFIG = path.join(__dirname, 'sync_config.json');
   const UNC_CONFIG = '\\\\hcdc\\elect\\OfficeFiles\\User Shareable Folders\\Nate\'s Shareable Folder\\PurchaseFormConfig\\sync_config.json';
 
+  console.log(`[CONFIG] /api/config requested.`);
+  console.log(`[CONFIG] Checking Windows UNC network path: "${UNC_CONFIG}"`);
+
   // 1. Try UNC intranet network path first
-  if (fs.existsSync(UNC_CONFIG)) {
-    try {
+  try {
+    if (fs.existsSync(UNC_CONFIG)) {
+      console.log(`[CONFIG] UNC path exists. Reading network config...`);
       const raw = fs.readFileSync(UNC_CONFIG, 'utf8');
-      return res.json(JSON.parse(raw));
-    } catch (err) {
-      console.error("Error reading UNC config file:", err);
+      const parsed = JSON.parse(raw);
+      console.log(`[CONFIG] UNC config read and parsed successfully!`);
+      return res.json(parsed);
+    } else {
+      console.log(`[CONFIG] UNC path does NOT exist or is unreachable in this environment.`);
     }
+  } catch (err) {
+    console.error(`[CONFIG] Critical error reading UNC network path:`, err.message);
   }
 
   // 2. Try local fallback (not committed to Git)
+  console.log(`[CONFIG] Checking local project fallback: "${LOCAL_CONFIG}"`);
   if (fs.existsSync(LOCAL_CONFIG)) {
     try {
+      console.log(`[CONFIG] Local config exists. Reading local config...`);
       const raw = fs.readFileSync(LOCAL_CONFIG, 'utf8');
-      return res.json(JSON.parse(raw));
+      const parsed = JSON.parse(raw);
+      console.log(`[CONFIG] Local config read and parsed successfully!`);
+      return res.json(parsed);
     } catch (err) {
-      console.error("Error reading local config file:", err);
+      console.error(`[CONFIG] Critical error reading local config:`, err.message);
     }
+  } else {
+    console.log(`[CONFIG] Local fallback config does NOT exist.`);
   }
 
   // 3. Fallback/Not Found
+  console.log(`[CONFIG] Configuration not found anywhere. Returning 404.`);
   res.status(404).json({ success: false, message: "Configuration file not found" });
 });
 
