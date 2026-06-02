@@ -2126,35 +2126,51 @@ function renderAnalytics() {
    ============================================================ */
 
 async function loadConfig() {
+  console.log('[CONFIG] Attempting to load configuration...');
   try {
     // Try LAN server endpoint first
-    let res = await fetch('/api/config').catch(() => null);
+    let res = await fetch('/api/config').catch(err => {
+      console.warn('[CONFIG] Fetch /api/config failed:', err);
+      return null;
+    });
     // Fallback to local file if server not present (e.g. opened statically)
     if (!res || !res.ok) {
-      res = await fetch('sync_config.json').catch(() => null);
+      console.log('[CONFIG] LAN server endpoint config fetch non-ok, trying local file fallback...');
+      res = await fetch('sync_config.json').catch(err => {
+        console.warn('[CONFIG] Fetch sync_config.json failed:', err);
+        return null;
+      });
     }
     
     if (res && res.ok) {
       const config = await res.json();
+      console.log('[CONFIG] Config loaded successfully:', config);
       if (config.syncGistId) {
         localStorage.setItem('po_sync_gist_id', config.syncGistId);
         syncGistId = config.syncGistId;
+        console.log('[CONFIG] Set syncGistId =', syncGistId);
       }
       if (config.syncGistToken) {
         localStorage.setItem('po_sync_gist_token', config.syncGistToken);
         syncGistToken = config.syncGistToken;
+        console.log('[CONFIG] Set syncGistToken =', syncGistToken ? '***' : '');
       }
       if (config.syncUrl) {
         localStorage.setItem('po_sync_url', config.syncUrl);
         syncUrl = config.syncUrl;
+        console.log('[CONFIG] Set syncUrl =', syncUrl);
       }
       if (config.syncProvider) {
         localStorage.setItem('po_sync_provider', config.syncProvider);
         syncProvider = config.syncProvider;
+        console.log('[CONFIG] Set syncProvider =', syncProvider);
       }
+      updateSyncUI();
+    } else {
+      console.warn('[CONFIG] No configuration response or invalid response status.');
     }
   } catch (err) {
-    console.log('Intranet config file not available, using local settings.');
+    console.error('[CONFIG] Critical exception loading configuration:', err);
   }
 }
 
