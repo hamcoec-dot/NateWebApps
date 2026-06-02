@@ -373,71 +373,71 @@
 <!-- ===================== SYNC MODAL ===================== -->
 <dialog id="modal-sync" class="modal" aria-labelledby="sync-title">
   <div class="modal-header">
-    <h2 id="sync-title" class="modal-title">Synchronization Status</h2>
+    <h2 id="sync-title" class="modal-title">Synchronization Settings</h2>
     <button class="modal-close" aria-label="Close sync panel" data-close="modal-sync">✕</button>
   </div>
-  <div class="modal-body" style="padding: 1.5rem;">
+  <form id="sync-form" class="modal-body" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.15rem; margin: 0;" novalidate>
     
     <!-- Active Status Indicator Card -->
-    <div style="display: flex; align-items: center; gap: 1rem; background: var(--c-accent-soft); padding: 1.15rem; border-radius: var(--r-md); margin-bottom: 1.5rem; border: 1.5px solid var(--c-accent-2);">
+    <div style="display: flex; align-items: center; gap: 1rem; background: var(--c-accent-soft); padding: 1rem 1.15rem; border-radius: var(--r-md); border: 1.5px solid var(--c-accent-2);">
       <div style="width: 14px; height: 14px; background: var(--c-success); border-radius: 50%; box-shadow: 0 0 12px var(--c-success); animation: pulseGreen 2s infinite ease-in-out;" aria-hidden="true"></div>
       <div>
-        <div style="font-weight: 700; font-size: 0.95rem; color: var(--c-accent);">Automated Sync Active</div>
-        <div style="font-size: 0.78rem; color: var(--c-text-muted); margin-top: 0.2rem;">All orders, vendors, ship-tos, and clerks are synced in real-time.</div>
+        <div style="font-weight: 700; font-size: 0.92rem; color: var(--c-accent);">Sync Connection Dashboard</div>
+        <div style="font-size: 0.76rem; color: var(--c-text-muted); margin-top: 0.15rem;" id="sync-connection-status">Status: Checking connection...</div>
       </div>
     </div>
 
-    <!-- Explanation -->
-    <p style="font-size: 0.82rem; color: var(--c-text-muted); line-height: 1.6; margin-bottom: 1.5rem;">
-      The Hamilton County Election Commission purchase order system is automatically connected to a secure cloud database. Any changes to clerks, vendors, drafts, or ship-to locations sync immediately in the background across all terminals. 
-    </p>
-
-    <!-- Read-Only Info Table -->
-    <div style="background: var(--c-surface-2); border: 1.5px solid var(--c-border); border-radius: var(--r-md); padding: 1.15rem; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem;">
-      <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
-        <span style="font-weight: 600; color: var(--c-text-muted);">Sync Protocol</span>
-        <span style="font-weight: 700; color: var(--c-accent);">Serverless Cloud Gist API</span>
-      </div>
-      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-top: 1px solid var(--c-border); padding-top: 0.8rem;">
-        <span style="font-weight: 600; color: var(--c-text-muted);">Target Cloud ID</span>
-        <span id="sync-gist-display" style="font-family: monospace; font-size: 0.8rem; background: var(--c-surface); padding: 0.2rem 0.45rem; border-radius: 4px; border: 1.5px solid var(--c-border); color: var(--c-text);">Not Configured</span>
-      </div>
-      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-top: 1px solid var(--c-border); padding-top: 0.8rem; align-items: center;">
-        <span style="font-weight: 600; color: var(--c-text-muted);">Connection Status</span>
-        <span style="font-weight: 700; color: var(--c-success); display: flex; align-items: center; gap: 0.25rem;">
-          <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Active
-        </span>
+    <!-- Sync Mode Switcher (Cloud / LAN) -->
+    <div>
+      <span class="comments-label" style="margin-bottom: 0.4rem; display: block;">Sync Protocol</span>
+      <div class="sync-mode-toggle" style="display: flex; gap: 0.5rem; margin-bottom: 0.25rem;">
+        <button type="button" id="sync-mode-cloud" class="toggle-btn active" style="flex: 1; padding: 0.45rem; border-radius: var(--r-sm); font-weight: 700; cursor: pointer; font-family: var(--ff); font-size: 0.78rem;">Cloud Gist API</button>
+        <button type="button" id="sync-mode-lan" class="toggle-btn" style="flex: 1; padding: 0.45rem; border-radius: var(--r-sm); font-weight: 700; cursor: pointer; font-family: var(--ff); font-size: 0.78rem;">Local LAN Server</button>
       </div>
     </div>
 
-    <!-- Close Button -->
-    <div style="display: flex; justify-content: flex-end;">
-      <button type="button" class="btn-secondary" data-close="modal-sync" style="font-weight: 700; padding: 0.5rem 1.5rem; font-size: 0.82rem; cursor: pointer; border-radius: var(--r-sm);">Close Status Dashboard</button>
+    <!-- Cloud Gist Section -->
+    <div id="sync-section-cloud" style="display: flex; flex-direction: column; gap: 0.7rem;">
+      <div>
+        <label for="sync-gist-token" class="comments-label" style="margin-bottom: 0.3rem; display: block;">GitHub Personal Access Token (PAT)</label>
+        <input id="sync-gist-token" type="password" class="comments-input" placeholder="Enter GitHub PAT (ghp_...)" style="font-family: monospace; font-size: 0.82rem; width: 100%;" />
+      </div>
+      <div>
+        <label for="sync-gist-id" class="comments-label" style="margin-bottom: 0.3rem; display: block;">Gist Database ID</label>
+        <input id="sync-gist-id" type="text" class="comments-input" placeholder="Enter Secret Gist ID" style="font-family: monospace; font-size: 0.82rem; width: 100%;" />
+      </div>
     </div>
 
-    <!-- HIDDEN BACKING FORM AND INPUTS TO PREVENT JS CRASHES -->
-    <div style="display: none !important;" aria-hidden="true">
-      <div class="sync-mode-toggle">
-        <button type="button" id="sync-mode-cloud" class="toggle-btn active">Cloud</button>
-        <button type="button" id="sync-mode-lan" class="toggle-btn">LAN</button>
+    <!-- LAN Server Section -->
+    <div id="sync-section-lan" style="display: none; flex-direction: column; gap: 0.7rem;">
+      <div>
+        <label for="sync-url-input" class="comments-label" style="margin-bottom: 0.3rem; display: block;">LAN Server URL</label>
+        <input id="sync-url-input" type="url" class="comments-input" placeholder="http://192.168.1.50:3000" style="font-size: 0.82rem; width: 100%;" />
       </div>
-      <form id="sync-form">
-        <div id="sync-section-cloud">
-          <input id="sync-gist-id" type="text" />
-          <button type="button" id="btn-create-gist">Create</button>
-          <input id="sync-gist-token" type="password" />
+    </div>
+
+    <!-- Info Card displaying current active connection and Import/Export -->
+    <div style="background: var(--c-surface-2); border: 1.5px solid var(--c-border); border-radius: var(--r-md); padding: 1rem; display: flex; flex-direction: column; gap: 0.7rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem;">
+        <span style="font-weight: 600; color: var(--c-text-muted);">Active Target</span>
+        <span id="sync-gist-display" style="font-family: monospace; font-size: 0.76rem; background: var(--c-surface); padding: 0.2rem 0.45rem; border-radius: 4px; border: 1.5px solid var(--c-border); color: var(--c-text);">Not Configured</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--c-border); padding-top: 0.7rem; font-size: 0.78rem;">
+        <span style="font-weight: 600; color: var(--c-text-muted);">Terminal Provisioning</span>
+        <div style="display: flex; gap: 0.4rem;">
+          <button type="button" id="btn-export-config" class="btn-secondary" style="font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: var(--r-sm); font-weight: 700; cursor: pointer; font-family: var(--ff);">Export Config</button>
+          <button type="button" id="btn-import-config" class="btn-secondary" style="font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: var(--r-sm); font-weight: 700; cursor: pointer; font-family: var(--ff);">Import Config</button>
         </div>
-        <div id="sync-section-lan">
-          <input id="sync-url-input" type="url" />
-        </div>
-        <div id="sync-connection-status">Status</div>
-        <button type="button" id="btn-test-sync">Test</button>
-        <button type="submit">Save</button>
-      </form>
+      </div>
     </div>
 
-  </div>
+    <!-- Actions -->
+    <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.3rem;">
+      <button type="button" id="btn-test-sync" class="btn-secondary" style="font-weight: 700; padding: 0.5rem 1.15rem; font-size: 0.8rem; cursor: pointer; border-radius: var(--r-sm); font-family: var(--ff);">Test Connection</button>
+      <button type="submit" class="btn-primary" style="font-weight: 700; padding: 0.5rem 1.35rem; font-size: 0.8rem; cursor: pointer; border-radius: var(--r-sm); font-family: var(--ff);">Save &amp; Connect</button>
+    </div>
+
+  </form>
 </dialog>
 
 <script src="app.js"></script>

@@ -884,9 +884,28 @@ function updateSyncUI() {
     if (btnLan) btnLan.classList.add('active');
   }
 
-  if (gistIdInput) gistIdInput.value = syncGistId;
-  if (gistTokenInput) gistTokenInput.value = syncGistToken;
-  if (urlInput) urlInput.value = syncUrl;
+  // Security Masking in inputs: do not output raw secret keys as value, use placeholder
+  if (gistIdInput) {
+    gistIdInput.value = '';
+    if (syncGistId) {
+      gistIdInput.placeholder = syncGistId.slice(0, 12) + '...' + syncGistId.slice(-4);
+    } else {
+      gistIdInput.placeholder = 'Enter Secret Gist ID';
+    }
+    gistIdInput.dataset.changed = 'false';
+  }
+  if (gistTokenInput) {
+    gistTokenInput.value = '';
+    if (syncGistToken) {
+      gistTokenInput.placeholder = '••••••••';
+    } else {
+      gistTokenInput.placeholder = 'Enter GitHub PAT (ghp_...)';
+    }
+    gistTokenInput.dataset.changed = 'false';
+  }
+  if (urlInput) {
+    urlInput.value = syncUrl;
+  }
 
   const displayId = $('sync-gist-display');
   if (displayId) {
@@ -925,13 +944,7 @@ function updateSyncUI() {
     if (btn) btn.className = 'nav-btn nav-btn--sync offline';
     if (txt) txt.textContent = 'Sync: Offline';
     if (statusInfo) {
-      if (syncProvider === 'cloud' && syncGistToken && syncGistToken.startsWith('github_pat_')) {
-        statusInfo.textContent = 'Error: Fine-grained PAT (github_pat_...) detected. Use a Classic PAT (ghp_...) with gist scope.';
-      } else {
-        statusInfo.textContent = syncProvider === 'cloud'
-          ? 'Status: GitHub Gist Offline (Using Cached Local Data)'
-          : 'Status: LAN Server Offline (Using Cached Local Data)';
-      }
+      statusInfo.textContent = 'Connection failed, please contact your administrator.';
       statusInfo.style.color = '#ef4444';
     }
   }
@@ -939,13 +952,28 @@ function updateSyncUI() {
 
 async function testSyncConnection() {
   if (syncProvider === 'cloud') {
-    const gistId = $('sync-gist-id').value.trim();
-    const token = $('sync-gist-token').value.trim();
-    if (!gistId) return { success: false, message: 'Please enter a GitHub Gist ID' };
+    const inputGistId = $('sync-gist-id');
+    const inputGistToken = $('sync-gist-token');
     
-    if (token && token.startsWith('github_pat_')) {
-      return { success: false, message: 'Fine-grained PAT (github_pat_...) detected. GitHub restricts Gist access to Classic PATs (ghp_...) only. Please use a Classic PAT with the gist scope.' };
+    let gistId = inputGistId ? inputGistId.value.trim() : '';
+    if (gistId === '') {
+      if (inputGistId && inputGistId.dataset.changed === 'true') {
+        gistId = '';
+      } else {
+        gistId = syncGistId;
+      }
     }
+    
+    let token = inputGistToken ? inputGistToken.value.trim() : '';
+    if (token === '') {
+      if (inputGistToken && inputGistToken.dataset.changed === 'true') {
+        token = '';
+      } else {
+        token = syncGistToken;
+      }
+    }
+    
+    if (!gistId) return { success: false, message: 'Connection failed, please contact your administrator.' };
     
     try {
       const headers = {
@@ -968,129 +996,29 @@ async function testSyncConnection() {
           return { success: true, message: 'GitHub Gist accessible, but database file hcec_po_db.json not found yet.' };
         }
       }
-      if (res.status === 401 || res.status === 403) {
-        return { success: false, message: 'Invalid or unauthorized GitHub Token (PAT)' };
-      }
-      if (res.status === 404) {
-        return { success: false, message: 'Secret Gist not found. (If secret, a valid GitHub PAT is required)' };
-      }
-      return { success: false, message: `GitHub API error (Status ${res.status})` };
+      return { success: false, message: 'Connection failed, please contact your administrator.' };
     } catch (err) {
       console.error('Test connection failed:', err);
-      return { success: false, message: 'Could not connect to GitHub API. Check network.' };
+      return { success: false, message: 'Connection failed, please contact your administrator.' };
     }
   } else {
-    const val = $('sync-url-input').value.trim();
-    if (!val) return { success: false, message: 'Please enter a valid Server URL' };
+    const valInput = $('sync-url-input');
+    const val = valInput ? valInput.value.trim() : '';
+    if (!val) return { success: false, message: 'Connection failed, please contact your administrator.' };
     try {
       const url = val.replace(/\/$/, '');
       const res = await fetch(`${url}/api/data`, { method: 'GET', cache: 'no-store' });
       if (res.ok) {
         return { success: true, message: 'LAN server connection successful!' };
       }
-      return { success: false, message: `LAN Server error (Error ${res.status})` };
+      return { success: false, message: 'Connection failed, please contact your administrator.' };
     } catch {
-      return { success: false, message: 'Could not connect to local LAN server.' };
+      return { success: false, message: 'Connection failed, please contact your administrator.' };
     }
   }
 }
 
-async function createSyncKey() {
-  const statusInfo = $('sync-connection-status');
-  const token = $('sync-gist-token').value.trim();
-  
-  if (!token) {
-    if (statusInfo) {
-      statusInfo.textContent = 'Error: A GitHub PAT is required to create a secret Gist!';
-      statusInfo.style.color = '#ef4444';
-    }
-    showStatus('Please enter a GitHub PAT first!', 'warn');
-    return false;
-  }
-  
-  if (token.startsWith('github_pat_')) {
-    if (statusInfo) {
-      statusInfo.textContent = 'Error: Fine-grained PAT detected. Use a Classic PAT (ghp_...) with gist scope.';
-      statusInfo.style.color = '#ef4444';
-    }
-    showStatus('Please use a Classic GitHub PAT (ghp_...) with gist scope!', 'warn');
-    return false;
-  }
-  
-  if (statusInfo) {
-    statusInfo.textContent = 'Creating new secret database Gist...';
-    statusInfo.style.color = 'var(--c-text-muted)';
-  }
-  
-  try {
-    const body = {
-      description: "HCEC Purchase Order Database Sync (Secret Gist)",
-      public: false,
-      files: {
-        "hcec_po_db.json": {
-          "content": JSON.stringify({
-            vendors: getVendors(),
-            shiptos: getShipTos(),
-            clerks: getClerks(),
-            orders: getOrders(),
-          }, null, 2)
-        }
-      }
-    };
-    
-    const res = await fetch('https://api.github.com/gists', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/vnd.github+json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(body)
-    });
-    
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.message || `GitHub error ${res.status}`);
-    }
-    
-    const result = await res.json();
-    if (result.id) {
-      syncGistId = result.id;
-      syncGistToken = token;
-      localStorage.setItem('po_sync_gist_id', syncGistId);
-      localStorage.setItem('po_sync_gist_token', syncGistToken);
-      syncProvider = 'cloud';
-      localStorage.setItem('po_sync_provider', 'cloud');
-      
-      const idInput = $('sync-gist-id');
-      if (idInput) idInput.value = syncGistId;
-      
-      try {
-        await navigator.clipboard.writeText(syncGistId);
-        showStatus('New Secret Gist ID copied to Clipboard!', 'ok');
-      } catch {
-        showStatus('New Secret Gist generated!', 'ok');
-      }
-      
-      syncState = 'connected';
-      updateSyncUI();
-      
-      if (statusInfo) {
-        statusInfo.textContent = `New Gist Created! ID: ${syncGistId} (Copied to Clipboard!)`;
-        statusInfo.style.color = 'var(--c-success)';
-      }
-      return true;
-    }
-    throw new Error('No Gist ID returned');
-  } catch (err) {
-    console.error('Failed to create secret Gist:', err);
-    if (statusInfo) {
-      statusInfo.textContent = `Failed: ${err.message}`;
-      statusInfo.style.color = '#ef4444';
-    }
-    return false;
-  }
-}
+// createSyncKey removed
 
 async function pullFromSyncServer(bootstrapIfEmpty = false) {
   if (syncProvider === 'cloud') {
@@ -1491,9 +1419,117 @@ if ($('sync-mode-lan')) {
   });
 }
 
-// Create Secret Gist button
-if ($('btn-create-gist')) {
-  $('btn-create-gist').addEventListener('click', createSyncKey);
+// Input change listeners to track manual modifications
+if ($('sync-gist-id')) {
+  $('sync-gist-id').addEventListener('input', () => {
+    $('sync-gist-id').dataset.changed = 'true';
+  });
+}
+if ($('sync-gist-token')) {
+  $('sync-gist-token').addEventListener('input', () => {
+    $('sync-gist-token').dataset.changed = 'true';
+  });
+}
+
+// Export Config
+if ($('btn-export-config')) {
+  $('btn-export-config').addEventListener('click', async () => {
+    const gistIdInput = $('sync-gist-id');
+    const gistTokenInput = $('sync-gist-token');
+    const urlInput = $('sync-url-input');
+    
+    let gistId = gistIdInput ? gistIdInput.value.trim() : '';
+    if (gistId === '') {
+      if (gistIdInput && gistIdInput.dataset.changed === 'true') {
+        gistId = '';
+      } else {
+        gistId = syncGistId;
+      }
+    }
+    
+    let gistToken = gistTokenInput ? gistTokenInput.value.trim() : '';
+    if (gistToken === '') {
+      if (gistTokenInput && gistTokenInput.dataset.changed === 'true') {
+        gistToken = '';
+      } else {
+        gistToken = syncGistToken;
+      }
+    }
+    
+    const url = urlInput ? urlInput.value.trim() : '';
+    
+    const config = {
+      syncProvider,
+      syncGistId: gistId,
+      syncGistToken: gistToken,
+      syncUrl: url
+    };
+    
+    try {
+      const jsonStr = JSON.stringify(config);
+      const b64Str = btoa(unescape(encodeURIComponent(jsonStr)));
+      await navigator.clipboard.writeText(b64Str);
+      showStatus('Configuration exported to clipboard!', 'ok');
+    } catch (err) {
+      console.error('Export failed:', err);
+      showStatus('Export failed. Check console.', 'warn');
+    }
+  });
+}
+
+// Import Config
+if ($('btn-import-config')) {
+  $('btn-import-config').addEventListener('click', async () => {
+    const b64Str = prompt('Paste the exported configuration string:');
+    if (!b64Str) return;
+    try {
+      const jsonStr = decodeURIComponent(escape(atob(b64Str.trim())));
+      const config = JSON.parse(jsonStr);
+      
+      if (config.syncProvider) {
+        syncProvider = config.syncProvider;
+        localStorage.setItem('po_sync_provider', syncProvider);
+      }
+      if (config.hasOwnProperty('syncGistId')) {
+        syncGistId = config.syncGistId;
+        localStorage.setItem('po_sync_gist_id', syncGistId);
+      }
+      if (config.hasOwnProperty('syncGistToken')) {
+        syncGistToken = config.syncGistToken;
+        localStorage.setItem('po_sync_gist_token', syncGistToken);
+      }
+      if (config.hasOwnProperty('syncUrl')) {
+        syncUrl = config.syncUrl;
+        localStorage.setItem('po_sync_url', syncUrl);
+      }
+      
+      updateSyncUI();
+      showStatus('Configuration imported successfully! Testing connection...', 'ok');
+      
+      const ok = await pullFromSyncServer(true);
+      if (ok) {
+        showStatus('Imported and synchronization active!', 'ok');
+        populateVendorSelect();
+        populateShipToSelect();
+        populateClerkSelect();
+        const activePoNum = localStorage.getItem('po_active_num');
+        const orders = getOrders();
+        const activeOrder = activePoNum ? orders.find(o => o.poNumber === activePoNum) : null;
+        if (activeOrder) {
+          loadForm(activeOrder);
+        } else if (orders.length > 0) {
+          loadForm(orders[0]);
+        } else {
+          newOrder();
+        }
+      } else {
+        showStatus('Connection failed, please contact your administrator.', 'warn');
+      }
+    } catch (err) {
+      console.error('Import failed:', err);
+      showStatus('Invalid configuration string.', 'warn');
+    }
+  });
 }
 
 // Test sync connection button
@@ -1517,8 +1553,27 @@ if ($('sync-form')) {
   $('sync-form').addEventListener('submit', async e => {
     e.preventDefault();
     if (syncProvider === 'cloud') {
-      const gistId = $('sync-gist-id').value.trim();
-      const gistToken = $('sync-gist-token').value.trim();
+      const inputGistId = $('sync-gist-id');
+      const inputGistToken = $('sync-gist-token');
+      
+      let gistId = inputGistId ? inputGistId.value.trim() : '';
+      if (gistId === '') {
+        if (inputGistId && inputGistId.dataset.changed === 'true') {
+          gistId = '';
+        } else {
+          gistId = syncGistId;
+        }
+      }
+      
+      let gistToken = inputGistToken ? inputGistToken.value.trim() : '';
+      if (gistToken === '') {
+        if (inputGistToken && inputGistToken.dataset.changed === 'true') {
+          gistToken = '';
+        } else {
+          gistToken = syncGistToken;
+        }
+      }
+
       if (gistId) {
         syncGistId = gistId;
         syncGistToken = gistToken;
@@ -1542,11 +1597,7 @@ if ($('sync-form')) {
             newOrder();
           }
         } else {
-          if (syncState === 'connected') {
-            showStatus('Connected, but sync error occurred.', 'warn');
-          } else {
-            showStatus('Saved, but GitHub Gist is offline or invalid.', 'warn');
-          }
+          showStatus('Connection failed, please contact your administrator.', 'warn');
         }
       } else {
         syncGistId = '';
@@ -1581,11 +1632,7 @@ if ($('sync-form')) {
             newOrder();
           }
         } else {
-          if (syncState === 'connected') {
-            showStatus('Connected but server is empty or merge failed.', 'warn');
-          } else {
-            showStatus('Saved, but LAN server is offline.', 'warn');
-          }
+          showStatus('Connection failed, please contact your administrator.', 'warn');
         }
       } else {
         syncUrl = '';
