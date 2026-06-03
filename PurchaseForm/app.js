@@ -70,35 +70,46 @@ function uid() { return Date.now().toString(36) + Math.random().toString(36).sli
    2. SEED DATA (from Purchase Request.xlsx)
    ============================================================ */
 
+function migratePII() {
+  const migratedKey = 'po_pii_migrated_v1';
+  if (localStorage.getItem(migratedKey)) return;
+
+  // Cleanup vendors matching original PII defaults
+  let vendors = getVendors();
+  vendors = vendors.filter(v => {
+    const isDefault = 
+      (v.name === "Sam's Club" && v.addr === "6101 Lee Highway") ||
+      (v.name === "Amazon" && v.addr === "7200 Discovery Dr") ||
+      (v.name === "DivcoData" && v.addr === "") ||
+      (v.name === "Staples Business" && v.addr === "3721 Powers Court") ||
+      (v.name === "Marco Promos" && v.addr === "2640 Commerce Drive");
+    return !isDefault;
+  });
+  dbSet(DB_KEYS.vendors, vendors);
+
+  // Cleanup shiptos matching original PII defaults
+  let shiptos = getShipTos();
+  shiptos = shiptos.filter(s => {
+    const isDefault = 
+      (s.name === "Bill Adams" && s.org === "HCEC") ||
+      (s.name === "Nathan Foster" && s.org === "HCEC") ||
+      (s.name === "Sara Goodrich" && s.org === "Hamilton County Election Commission") ||
+      (s.name === "Sherri Sivley" && s.org === "HCEC");
+    return !isDefault;
+  });
+  dbSet(DB_KEYS.shiptos, shiptos);
+
+  // Cleanup clerks matching original PII defaults
+  let clerks = getClerks();
+  const defaultClerkNames = ["Kristi Berry", "Bill Adams", "Nathan Foster", "Sherri Sivley"];
+  clerks = clerks.filter(c => !defaultClerkNames.includes(c.name));
+  dbSet(DB_KEYS.clerks, clerks);
+
+  localStorage.setItem(migratedKey, 'true');
+}
+
 function seedIfEmpty() {
-  const vendors = dbGet(DB_KEYS.vendors);
-  if (!vendors || vendors.length === 0) {
-    saveVendors([
-      { id: uid(), name: "Sam's Club",                  addr: '6101 Lee Highway',    city: 'Chattanooga, TN 37410', phone: '',                  other: '' },
-      { id: uid(), name: 'Amazon',                      addr: '7200 Discovery Dr',   city: 'Chattanooga, TN',       phone: '',                  other: '' },
-      { id: uid(), name: 'DivcoData',                   addr: '',                    city: '',                      phone: '',                  other: '' },
-      { id: uid(), name: 'Staples Business',            addr: '3721 Powers Court',   city: 'Chattanooga, TN 37416', phone: '(888) 705-3789',    other: 'Diversified Companies LLC' },
-      { id: uid(), name: 'Marco Promos',                addr: '2640 Commerce Drive', city: 'Harrisburg, PA 17110',  phone: 'Cell: (423) 356-0354', other: '' },
-    ]);
-  }
-  const shiptos = dbGet(DB_KEYS.shiptos);
-  if (!shiptos || shiptos.length === 0) {
-    saveShipTos([
-      { id: uid(), name: 'Bill Adams',       org: 'HCEC', addr: '700 River Terminal Road', city: 'Chattanooga, TN 37406', phone: '423-209-8683' },
-      { id: uid(), name: 'Nathan Foster',    org: 'HCEC', addr: '700 River Terminal Road', city: 'Chattanooga, TN 37406', phone: '423-209-8683' },
-      { id: uid(), name: 'Sara Goodrich',    org: 'Hamilton County Election Commission', addr: '700 River Terminal Road', city: 'Chattanooga, TN 37406', phone: '423-209-8695' },
-      { id: uid(), name: 'Sherri Sivley',    org: 'HCEC', addr: '700 River Terminal Road', city: 'Chattanooga, TN 37406', phone: '423-209-8683' },
-    ]);
-  }
-  const clerks = dbGet(DB_KEYS.clerks);
-  if (!clerks || clerks.length === 0) {
-    saveClerks([
-      { id: uid(), name: 'Kristi Berry'  },
-      { id: uid(), name: 'Bill Adams'    },
-      { id: uid(), name: 'Nathan Foster' },
-      { id: uid(), name: 'Sherri Sivley' },
-    ]);
-  }
+  // Rely strictly on local storage or sync data. No hardcoded default seed data.
 }
 
 /* ============================================================
@@ -386,38 +397,53 @@ function updateGrandTotal(subtotal) {
 
 function populateVendorSelect(selectedId = '') {
   const sel = $('vendor-select');
-  sel.innerHTML = '<option value="">— Select Vendor —</option>';
-  getVendors().forEach(v => {
-    const opt = make('option');
-    opt.value = v.id;
-    opt.textContent = v.name;
-    if (v.id === selectedId) opt.selected = true;
-    sel.appendChild(opt);
-  });
+  const list = getVendors();
+  if (list.length === 0) {
+    sel.innerHTML = '<option value="">— No Vendors Found (Add via Vendors menu) —</option>';
+  } else {
+    sel.innerHTML = '<option value="">— Select Vendor —</option>';
+    list.forEach(v => {
+      const opt = make('option');
+      opt.value = v.id;
+      opt.textContent = v.name;
+      if (v.id === selectedId) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
 }
 
 function populateShipToSelect(selectedId = '') {
   const sel = $('shipto-select');
-  sel.innerHTML = '<option value="">— Select Ship-To —</option>';
-  getShipTos().forEach(s => {
-    const opt = make('option');
-    opt.value = s.id;
-    opt.textContent = s.name;
-    if (s.id === selectedId) opt.selected = true;
-    sel.appendChild(opt);
-  });
+  const list = getShipTos();
+  if (list.length === 0) {
+    sel.innerHTML = '<option value="">— No Ship-To Locations Found (Add via Ship-To menu) —</option>';
+  } else {
+    sel.innerHTML = '<option value="">— Select Ship-To —</option>';
+    list.forEach(s => {
+      const opt = make('option');
+      opt.value = s.id;
+      opt.textContent = s.name;
+      if (s.id === selectedId) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
 }
 
 function populateClerkSelect(selectedName = '') {
   const sel = $('po-requested-by');
-  sel.innerHTML = '<option value="">— Select Clerk —</option>';
-  getClerks().forEach(c => {
-    const opt = make('option');
-    opt.value = c.name;
-    opt.textContent = c.name;
-    if (c.name === selectedName) opt.selected = true;
-    sel.appendChild(opt);
-  });
+  const list = getClerks();
+  if (list.length === 0) {
+    sel.innerHTML = '<option value="">— No Clerks Found (Add via Clerks menu) —</option>';
+  } else {
+    sel.innerHTML = '<option value="">— Select Clerk —</option>';
+    list.forEach(c => {
+      const opt = make('option');
+      opt.value = c.name;
+      opt.textContent = c.name;
+      if (c.name === selectedName) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
 }
 
 function fillVendorAddress(vendorId) {
@@ -2222,6 +2248,7 @@ async function loadConfig() {
 }
 
 async function init() {
+  migratePII();
   // Load configuration from local intranet share or file dynamically on boot
   await loadConfig();
 
