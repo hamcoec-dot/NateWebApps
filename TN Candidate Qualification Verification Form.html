@@ -617,7 +617,7 @@
                 voterStatus: "Registered voter and bona fide citizen/resident of Town",
                 special: "Employment: Municipal employees not qualified to run unless authorized by local ordinance (TCA § 7-51-1501)."
             },
-            "Soddy-Daisy Commissioner": {
+            "Soddy Daisy Commissioner": {
                 age: "18 years of age (TCA § 8-18-101)",
                 residency: "N/A",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
@@ -683,14 +683,50 @@
             const req = officeRequirements[selectedOffice];
             const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
+            // Determine source citation for municipal offices
+            let citationSuffix = '';
+            const municipalTowns = ['Lookout Mountain', 'Signal Mountain', 'Walden'];
+            const municipalCities = ['Chattanooga', 'Collegedale', 'East Ridge', 'Lakesite', 'Red Bank', 'Ridgeside', 'Soddy Daisy'];
+            
+            const isTown = municipalTowns.some(town => selectedOffice.startsWith(town));
+            const isCity = municipalCities.some(city => selectedOffice.startsWith(city));
+            
+            if (isTown) {
+                citationSuffix = ' (Town Charter)';
+            } else if (isCity) {
+                citationSuffix = ' (City Charter)';
+            }
+
+            function parseRequirement(titleBase, descText) {
+                if (!descText) return { title: titleBase, desc: '' };
+                
+                // Match parenthesized citations starting with TCA, PC, TN Const., or Const.
+                const citeRegex = /\s*\((TCA|PC|TN Const\.|Const\.)\s+[^)]+\)/gi;
+                
+                let title = titleBase;
+                let desc = descText;
+                
+                const matches = descText.match(citeRegex);
+                if (matches && matches.length > 0) {
+                    const citations = matches.map(c => c.trim()).join(' ');
+                    desc = descText.replace(citeRegex, '').replace(/\s+/g, ' ').trim();
+                    title = `${titleBase} ${citations}`;
+                } else if (citationSuffix && (titleBase.includes('Age') || titleBase.includes('Residency') || titleBase.includes('Voter'))) {
+                    title = `${titleBase}${citationSuffix}`;
+                }
+                
+                return { title, desc };
+            }
+
             let reqIndex = 1;
             let requirementsHtml = '';
 
             // Age requirement (always shown)
+            const ageData = parseRequirement("Age Requirement", req.age);
             requirementsHtml += `
                 <div class="requirement-block">
-                    <div class="requirement-title">${reqIndex}. Age Requirement</div>
-                    <div class="requirement-text">Required: ${req.age}</div>
+                    <div class="requirement-title">${reqIndex}. ${ageData.title}</div>
+                    <div class="requirement-text">Required: ${ageData.desc}</div>
                     <div class="requirement-check">
                         <div class="checkbox-group">
                             <input type="checkbox" id="age_understood">
@@ -703,10 +739,11 @@
 
             // Residency requirement (only if not N/A)
             if (shouldShowRequirement(req.residency)) {
+                const resData = parseRequirement("Residency Requirement", req.residency);
                 requirementsHtml += `
                     <div class="requirement-block">
-                        <div class="requirement-title">${reqIndex}. Residency Requirement</div>
-                        <div class="requirement-text">Required: ${req.residency}</div>
+                        <div class="requirement-title">${reqIndex}. ${resData.title}</div>
+                        <div class="requirement-text">Required: ${resData.desc}</div>
                         <div class="requirement-check">
                             <div class="checkbox-group">
                                 <input type="checkbox" id="res_understood">
@@ -720,10 +757,11 @@
 
             // Citizenship requirement (only if not N/A)
             if (shouldShowRequirement(req.citizenship)) {
+                const citData = parseRequirement("Citizenship Requirement", req.citizenship);
                 requirementsHtml += `
                     <div class="requirement-block">
-                        <div class="requirement-title">${reqIndex}. Citizenship Requirement</div>
-                        <div class="requirement-text">Required: ${req.citizenship}</div>
+                        <div class="requirement-title">${reqIndex}. ${citData.title}</div>
+                        <div class="requirement-text">Required: ${citData.desc}</div>
                         <div class="requirement-check">
                             <div class="checkbox-group">
                                 <input type="checkbox" id="cit_understood">
@@ -737,10 +775,11 @@
 
             // Voter registration status (only if not N/A)
             if (shouldShowRequirement(req.voterStatus)) {
+                const voterData = parseRequirement("Voter Registration Status", req.voterStatus);
                 requirementsHtml += `
                     <div class="requirement-block">
-                        <div class="requirement-title">${reqIndex}. Voter Registration Status</div>
-                        <div class="requirement-text">Required: ${req.voterStatus}</div>
+                        <div class="requirement-title">${reqIndex}. ${voterData.title}</div>
+                        <div class="requirement-text">Required: ${voterData.desc}</div>
                         <div class="requirement-check">
                             <div class="checkbox-group">
                                 <input type="checkbox" id="voter_understood">
@@ -754,10 +793,11 @@
 
             // Special requirements (only if not "None")
             if (shouldShowRequirement(req.special)) {
+                const specData = parseRequirement("Special Requirements/Certifications", req.special);
                 requirementsHtml += `
                     <div class="requirement-block">
-                        <div class="requirement-title">${reqIndex}. Special Requirements/Certifications</div>
-                        <div class="requirement-text">Required: ${req.special}</div>
+                        <div class="requirement-title">${reqIndex}. ${specData.title}</div>
+                        <div class="requirement-text">Required: ${specData.desc}</div>
                         <div class="requirement-check">
                             <div class="checkbox-group">
                                 <input type="checkbox" id="spec_understood">
@@ -772,7 +812,7 @@
             // General statutory qualifications (always last)
             requirementsHtml += `
                 <div class="requirement-block">
-                    <div class="requirement-title">${reqIndex}. General Statutory Qualifications (TCA 2025; § 8-18-101)</div>
+                    <div class="requirement-title">${reqIndex}. General Statutory Qualifications (TCA § 8-18-101)</div>
                     <div class="requirement-text">
                         No felony conviction (unless full citizenship rights restored) • No unpaid judgment to US/TN/County or default to treasury • Not a regular military member (Army, Navy, Air Force) • Not holding office of profit under foreign power or other state
                     </div>
@@ -820,12 +860,12 @@
             `;
             reqIndex++;
 
-            // Campaign Finance Registry Identification
+            // Campaign Finance Treasurer Certification
             requirementsHtml += `
                 <div class="requirement-block">
-                    <div class="requirement-title">${reqIndex}. Campaign Finance Registry Identification (PC 1087, § 27)</div>
+                    <div class="requirement-title">${reqIndex}. Campaign Finance Treasurer Certification (TCA § 2-10-105(e))</div>
                     <div class="requirement-text">
-                        Candidates cannot receive funds or make expenditures until they submit evidence of identification to the Registry for each officer, person who controls expenditures, and the treasurer.
+                        Candidates must certify the name and address of their political treasurer with the county election commission before receiving contributions or making expenditures.
                     </div>
                     <div class="requirement-check">
                         <div class="checkbox-group">
