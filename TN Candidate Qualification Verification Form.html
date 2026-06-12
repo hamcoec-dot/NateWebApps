@@ -168,7 +168,7 @@
             border: none;
             border-bottom: 1px solid #000;
             padding: 4px 0;
-            font-size: 12px;
+            font-size: 13px;
             font-family: 'Times New Roman', Times, serif;
             width: 100%;
             background-color: transparent;
@@ -181,7 +181,7 @@
 
         .form-input::placeholder {
             color: #999;
-            font-size: 11px;
+            font-size: 12px;
         }
 
         .requirement-block {
@@ -194,12 +194,12 @@
 
         .requirement-title {
             font-weight: bold;
-            font-size: 12px;
+            font-size: 14px;
             margin-bottom: 6px;
         }
 
         .requirement-text {
-            font-size: 11px;
+            font-size: 13px;
             margin-bottom: 8px;
             line-height: 1.4;
         }
@@ -207,19 +207,19 @@
         .requirement-check {
             display: flex;
             gap: 30px;
-            font-size: 11px;
+            font-size: 13px;
             margin-top: 5px;
         }
 
         .checkbox-group {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
         .checkbox-group input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             cursor: pointer;
         }
 
@@ -247,7 +247,7 @@
         }
 
         .sig-label {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: bold;
             text-align: center;
         }
@@ -277,12 +277,30 @@
             }
 
             .print-form {
-                padding: 40px 30px;
+                padding: 20px 30px;
                 max-width: 100%;
             }
 
             .print-only {
                 display: block;
+            }
+
+            .section {
+                margin-bottom: 12px;
+            }
+
+            .requirement-block {
+                margin-bottom: 8px;
+                padding: 6px 10px;
+            }
+
+            .signature-block {
+                margin-top: 15px;
+                gap: 20px;
+            }
+
+            .sig-space {
+                height: 40px;
             }
         }
 
@@ -675,20 +693,9 @@
                     <div class="requirement-text">Required: ${req.age}</div>
                     <div class="requirement-check">
                         <div class="checkbox-group">
-                            <input type="checkbox" id="age_met">
-                            <label for="age_met">Met</label>
+                            <input type="checkbox" id="age_understood">
+                            <label for="age_understood">I understand this requirement</label>
                         </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="age_not">
-                            <label for="age_not">Not Met</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="age_na">
-                            <label for="age_na">N/A</label>
-                        </div>
-                    </div>
-                    <div style="margin-top: 6px; font-size: 11px;">Verification Notes:
-                        <input type="text" class="form-input" style="margin-top: 2px; padding: 2px 0;">
                     </div>
                 </div>
             `;
@@ -702,20 +709,9 @@
                         <div class="requirement-text">Required: ${req.residency}</div>
                         <div class="requirement-check">
                             <div class="checkbox-group">
-                                <input type="checkbox" id="res_met">
-                                <label for="res_met">Met</label>
+                                <input type="checkbox" id="res_understood">
+                                <label for="res_understood">I understand this requirement</label>
                             </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="res_not">
-                                <label for="res_not">Not Met</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="res_na">
-                                <label for="res_na">N/A</label>
-                            </div>
-                        </div>
-                        <div style="margin-top: 6px; font-size: 11px;">Verification Notes:
-                            <input type="text" class="form-input" style="margin-top: 2px; padding: 2px 0;">
                         </div>
                     </div>
                 `;
@@ -730,20 +726,9 @@
                         <div class="requirement-text">Required: ${req.citizenship}</div>
                         <div class="requirement-check">
                             <div class="checkbox-group">
-                                <input type="checkbox" id="cit_met">
-                                <label for="cit_met">Met</label>
+                                <input type="checkbox" id="cit_understood">
+                                <label for="cit_understood">I understand this requirement</label>
                             </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="cit_not">
-                                <label for="cit_not">Not Met</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="cit_na">
-                                <label for="cit_na">N/A</label>
-                            </div>
-                        </div>
-                        <div style="margin-top: 6px; font-size: 11px;">Verification Notes:
-                            <input type="text" class="form-input" style="margin-top: 2px; padding: 2px 0;">
                         </div>
                     </div>
                 `;
@@ -758,20 +743,9 @@
                         <div class="requirement-text">Required: ${req.voterStatus}</div>
                         <div class="requirement-check">
                             <div class="checkbox-group">
-                                <input type="checkbox" id="voter_met">
-                                <label for="voter_met">Met</label>
+                                <input type="checkbox" id="voter_understood">
+                                <label for="voter_understood">I understand this requirement</label>
                             </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="voter_not">
-                                <label for="voter_not">Not Met</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="voter_na">
-                                <label for="voter_na">N/A</label>
-                            </div>
-                        </div>
-                        <div style="margin-top: 6px; font-size: 11px;">Verification Notes:
-                            <input type="text" class="form-input" style="margin-top: 2px; padding: 2px 0;">
                         </div>
                     </div>
                 `;
@@ -786,20 +760,9 @@
                         <div class="requirement-text">Required: ${req.special}</div>
                         <div class="requirement-check">
                             <div class="checkbox-group">
-                                <input type="checkbox" id="spec_met">
-                                <label for="spec_met">Met</label>
+                                <input type="checkbox" id="spec_understood">
+                                <label for="spec_understood">I understand this requirement</label>
                             </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="spec_not">
-                                <label for="spec_not">Not Met</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="spec_na">
-                                <label for="spec_na">N/A</label>
-                            </div>
-                        </div>
-                        <div style="margin-top: 6px; font-size: 11px;">Verification Notes:
-                            <input type="text" class="form-input" style="margin-top: 2px; padding: 2px 0;">
                         </div>
                     </div>
                 `;
@@ -815,16 +778,9 @@
                     </div>
                     <div class="requirement-check">
                         <div class="checkbox-group">
-                            <input type="checkbox" id="gen_met">
-                            <label for="gen_met">Met</label>
+                            <input type="checkbox" id="gen_understood">
+                            <label for="gen_understood">I understand this requirement</label>
                         </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="gen_not">
-                            <label for="gen_not">Not Met</label>
-                        </div>
-                    </div>
-                    <div style="margin-top: 6px; font-size: 11px;">Verification Notes:
-                        <input type="text" class="form-input" style="margin-top: 2px; padding: 2px 0;">
                     </div>
                 </div>
             `;
@@ -839,16 +795,9 @@
                     </div>
                     <div class="requirement-check">
                         <div class="checkbox-group">
-                            <input type="checkbox" id="pet_met">
-                            <label for="pet_met">Met</label>
+                            <input type="checkbox" id="pet_understood">
+                            <label for="pet_understood">I understand this requirement</label>
                         </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="pet_not">
-                            <label for="pet_not">Not Met</label>
-                        </div>
-                    </div>
-                    <div style="margin-top: 6px; font-size: 11px;">Verification Notes:
-                        <input type="text" class="form-input" style="margin-top: 2px; padding: 2px 0;">
                     </div>
                 </div>
             `;
@@ -863,16 +812,43 @@
                     </div>
                     <div class="requirement-check">
                         <div class="checkbox-group">
-                            <input type="checkbox" id="coi_met">
-                            <label for="coi_met">Met</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="coi_not">
-                            <label for="coi_not">Not Met</label>
+                            <input type="checkbox" id="coi_understood">
+                            <label for="coi_understood">I understand this requirement</label>
                         </div>
                     </div>
-                    <div style="margin-top: 6px; font-size: 11px;">Verification Notes:
-                        <input type="text" class="form-input" style="margin-top: 2px; padding: 2px 0;">
+                </div>
+            `;
+            reqIndex++;
+
+            // Campaign Finance Registry Identification
+            requirementsHtml += `
+                <div class="requirement-block">
+                    <div class="requirement-title">${reqIndex}. Campaign Finance Registry Identification (PC 1087, § 27)</div>
+                    <div class="requirement-text">
+                        Candidates cannot receive funds or make expenditures until they submit evidence of identification to the Registry for each officer, person who controls expenditures, and the treasurer.
+                    </div>
+                    <div class="requirement-check">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="cf_id_understood">
+                            <label for="cf_id_understood">I understand this requirement</label>
+                        </div>
+                    </div>
+                </div>
+            `;
+            reqIndex++;
+
+            // Campaign Financial Disclosure Reports
+            requirementsHtml += `
+                <div class="requirement-block">
+                    <div class="requirement-title">${reqIndex}. Campaign Financial Disclosure Reports (TCA § 2-10-107(b))</div>
+                    <div class="requirement-text">
+                        Candidates must file Campaign Financial Disclosure reports. Candidates will use a short form if contributions and expenditures are $1,000 or less, or a long form if they exceed $1,000. These financial reports must continue to be filed until they reach a $0 balance on hand, $0 loan balance, and $0 obligations.
+                    </div>
+                    <div class="requirement-check">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="cf_disc_understood">
+                            <label for="cf_disc_understood">I understand this requirement</label>
+                        </div>
                     </div>
                 </div>
             `;
@@ -932,33 +908,12 @@
                         ${requirementsHtml}
                     </div>
 
-                    <div class="section">
-                        <div class="section-title">FINAL DETERMINATION</div>
-                        <div style="margin-bottom: 15px;">
-                            <strong style="font-size: 12px;">Overall Qualification Status:</strong>
-                            <div style="margin-top: 8px; display: flex; gap: 30px; font-size: 11px;">
-                                <div class="checkbox-group">
-                                    <input type="checkbox" id="qualified">
-                                    <label for="qualified"><strong>QUALIFIED</strong></label>
-                                </div>
-                                <div class="checkbox-group">
-                                    <input type="checkbox" id="disqualified">
-                                    <label for="disqualified"><strong>DISQUALIFIED</strong></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="margin-top: 15px;">
-                            <div style="font-size: 11px; font-weight: bold; margin-bottom: 5px;">If disqualified, reason:</div>
-                            <textarea class="form-input" id="disqualificationReason" style="margin-top: 5px; padding: 4px 0; min-height: 40px; border-bottom: 1px solid #000; resize: none;"></textarea>
-                        </div>
-                    </div>
-
                     <div class="signature-section">
                         <div class="section-title">CERTIFICATIONS AND SIGNATURES</div>
                         
                         <div style="margin-bottom: 20px;">
-                            <div style="font-size: 11px; margin-bottom: 8px;"><strong>Candidate Statement:</strong></div>
-                            <div style="font-size: 10px; line-height: 1.4; margin-bottom: 10px;">I hereby certify that the information provided in this application is true, accurate, and complete to the best of my knowledge. I meet all constitutional and statutory qualifications for the office sought.</div>
+                            <div style="font-size: 13px; margin-bottom: 8px;"><strong>Candidate Statement:</strong></div>
+                            <div style="font-size: 12px; line-height: 1.4; margin-bottom: 10px;">I hereby certify that the information provided in this application is true, accurate, and complete to the best of my knowledge. I meet all constitutional and statutory qualifications for the office sought.</div>
                             <div class="signature-block">
                                 <div class="signature-line">
                                     <div class="sig-space"></div>
@@ -972,8 +927,8 @@
                         </div>
 
                         <div>
-                            <div style="font-size: 11px; margin-bottom: 8px;"><strong>County Election Commission Certification:</strong></div>
-                            <div style="font-size: 10px; line-height: 1.4; margin-bottom: 10px;">I certify that I have verified the above-named candidate's qualifications in accordance with Tennessee law. The information above accurately reflects my findings.</div>
+                            <div style="font-size: 13px; margin-bottom: 8px;"><strong>County Election Commission Certification:</strong></div>
+                            <div style="font-size: 12px; line-height: 1.4; margin-bottom: 10px;">I certify that I have verified the above-named candidate's qualifications in accordance with Tennessee law. The information above accurately reflects my findings.</div>
                             <div class="signature-block">
                                 <div class="signature-line">
                                     <div class="sig-space"></div>

@@ -1,20 +1,19 @@
-# Plan - Add Voter List Purchase Order Form Button
+# Plan - TN Candidate Qualification Verification Form Update
 
 ## Objective
-Update the main index file (`Index.html`) to include a navigation link/button for the new Voter List Purchase Form (`Voter List Purchase Form 2026.html`).
+Update `TN Candidate Qualification Verification Form.html` to add Campaign Finance Requirements to the checklist generated for all offices and optimize for letter-sized paper printing.
 
 ## Proposed Changes
 
-### Index.html
-- Add a new `<li>` element inside the `<ul class="app-list">`.
-- The new item will link to `Voter List Purchase Form 2026.html`.
-- Add proper descriptive link text and a span with form description.
-- Ensure the href is properly URL-encoded as `Voter%20List%20Purchase%20Form%202026.html`.
+### TN Candidate Qualification Verification Form.html
+- **Print Styles**: Add spacing and layout overrides inside `@media print` to keep the document compact on letter-sized paper (reduce section margins, block padding, signature heights).
+- **Checklist Additions**: Add dynamic blocks for Campaign Finance Registry Identification (PC 1087, § 27) and Campaign Financial Disclosure Reports (TCA § 2-10-107(b)) in `generateForm()`.
+- Ensure correct numbering sequence using `reqIndex`.
 
 ## Accessibility (WCAG 2.1 AA)
-- Semantic list structure (`<li>` within `<ul>` under `<nav aria-label="Available web applications">`).
-- Descriptors are placed within the corresponding list item for clear context mapping for screen readers.
-- Anchor target is clear and readable.
+- Use standard checkbox markup with linked `<label>` tags.
+- Maintain readable hierarchy.
 
 ## Verification
-- Load/inspect the updated list in `Index.html` to confirm accuracy.
+- Open in browser, generate checklists for different offices.
+- Open print preview (Ctrl+P) and verify letter-sized formatting.
