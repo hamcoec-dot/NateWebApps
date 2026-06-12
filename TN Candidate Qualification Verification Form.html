@@ -340,6 +340,15 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label for="partisanSelect">Partisan Status:</label>
+                <select id="partisanSelect" onchange="generateForm()">
+                    <option value="">-- Select partisan status --</option>
+                    <option value="Partisan">Partisan</option>
+                    <option value="Nonpartisan">Nonpartisan</option>
+                </select>
+            </div>
+
             <div class="button-group">
                 <button class="btn-primary" onclick="printForm()">Print Form</button>
                 <button class="btn-secondary" onclick="clearSelection()">Clear</button>
@@ -659,6 +668,7 @@
 
         function generateForm() {
             const selectedOffice = document.getElementById('officeSelect').value;
+            const partisanStatus = document.getElementById('partisanSelect').value;
             const preview = document.getElementById('formPreview');
 
             // Get dates and format logic
@@ -674,7 +684,7 @@
             const electionDateFormatted = formatDate(electionDateVal);
             const qualDateFormatted = formatDate(qualDateVal);
 
-            if (!selectedOffice) {
+            if (!selectedOffice || !partisanStatus) {
                 preview.innerHTML = '';
                 preview.style.display = 'none';
                 return;
@@ -854,6 +864,24 @@
             `;
             reqIndex++;
 
+            // Bona Fide Party Membership (if Partisan)
+            if (partisanStatus === 'Partisan') {
+                const partyData = parseRequirement("Bona Fide Party Membership", "Candidates for the general assembly, state executive committee, and other partisan nominations governed by party rules must be bona fide party members (TCA § 2-13-104 and TCA § 2-5-204). The party's executive committee makes the final determination on this qualification and must notify any disqualified candidate via certified or expedited mail within two days of their submission to allow for an appeal.");
+                requirementsHtml += `
+                    <div class="requirement-block">
+                        <div class="requirement-title">${reqIndex}. ${partyData.title}</div>
+                        <div class="requirement-text">Required: ${partyData.desc}</div>
+                        <div class="requirement-check">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="party_understood">
+                                <label for="party_understood">I understand this requirement</label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                reqIndex++;
+            }
+
             // Conflict of Interest Statement
             requirementsHtml += `
                 <div class="requirement-block">
@@ -952,6 +980,10 @@
                             <div class="field-label">Qualifying Deadline:</div>
                             <input type="text" class="form-input" id="qualifyingDeadline" value="${qualDateFormatted}">
                         </div>
+                        <div class="field-row">
+                            <div class="field-label">Partisan Status:</div>
+                            <input type="text" class="form-input" id="partisanStatusPrint" value="${partisanStatus}" readonly>
+                        </div>
                     </div>
 
                     <div class="section">
@@ -1006,8 +1038,9 @@
 
         function printForm() {
             const selectedOffice = document.getElementById('officeSelect').value;
-            if (!selectedOffice) {
-                alert('Please select an office first');
+            const partisanStatus = document.getElementById('partisanSelect').value;
+            if (!selectedOffice || !partisanStatus) {
+                alert('Please select both an office and partisan status first');
                 return;
             }
             window.print();
@@ -1015,6 +1048,7 @@
 
         function clearSelection() {
             document.getElementById('officeSelect').value = '';
+            document.getElementById('partisanSelect').value = '';
             document.getElementById('formPreview').innerHTML = '';
             document.getElementById('formPreview').style.display = 'none';
         }
