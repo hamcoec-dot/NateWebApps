@@ -352,157 +352,157 @@
     <script>
         const officeRequirements = {
             "U.S. Senator": {
-                age: "30 years old",
-                residency: "TN resident for 3 years; resident of county/district for 1 year preceding election",
-                citizenship: "U.S. Citizen for 9 years; Citizen of the State of Tennessee (TCA § 8-18-101)",
+                age: "30 years old (US Constitution Article 1, Section 3)",
+                residency: "TN resident for 3 years; resident of county/district for 1 year preceding election (TCA § 2-13-209)",
+                citizenship: "U.S. Citizen for 9 years (US Constitution Article 1, Section 3); Citizen of the State of Tennessee (TCA § 8-18-101)",
                 voterStatus: "Qualified voter of state/district",
                 special: "None"
             },
             "U.S. Representative": {
-                age: "25 years old",
-                residency: "TN resident for 3 years; resident of county/district for 1 year preceding election",
-                citizenship: "U.S. Citizen for 7 years; Citizen of the State of Tennessee (TCA § 8-18-101)",
+                age: "25 years old (US Constitution Article 1, Section 2)",
+                residency: "TN resident for 3 years; resident of county/district for 1 year preceding election (TCA § 2-13-209)",
+                citizenship: "U.S. Citizen for 7 years (US Constitution Article 1, Section 2); Citizen of the State of Tennessee (TCA § 8-18-101)",
                 voterStatus: "Qualified voter of district",
                 special: "None"
             },
             "State Senator": {
-                age: "30 years old",
-                residency: "TN resident for 3 years; resident of county/district for 1 year preceding election",
+                age: "30 years old (TN Constitution Article II, Section 10)",
+                residency: "TN resident for 3 years; resident of county/district for 1 year preceding election (TN Constitution Article II, Section 10)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
                 voterStatus: "Qualified voter of district",
                 special: "Incompatibilities: No judge, secretary of state, or person holding a 'lucrative office' under the US or TN may serve (TN Const. Art. II, § 26)."
             },
             "State Representative": {
-                age: "21 years old",
-                residency: "TN resident for 3 years; resident of county for 1 year preceding election",
+                age: "21 years old (TN Constitution Article II, Section 9)",
+                residency: "TN resident for 3 years; resident of county for 1 year preceding election (TN Constitution Article II, Section 9)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
                 voterStatus: "Qualified voter of district",
                 special: "Incompatibilities: No judge, secretary of state, or person holding a 'lucrative office' under the US or TN may serve (TN Const. Art. II, § 26)."
             },
             "State Executive Committeeman/woman": {
                 age: "18 years of age (TCA § 8-18-101)",
-                residency: "Resident/inhabitant of the Tennessee state senatorial district represented (elected by voters of that senatorial district)",
+                residency: "Resident/inhabitant of the Tennessee state senatorial district represented (TCA § 2-13-103)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
                 voterStatus: "NA",
-                special: "Must be bona fide member of the political party"
+                special: "Must be bona fide member of the political party (TCA § 2-13-103)"
             },
             "County Mayor/Executive": {
-                age: "25 years old",
-                residency: "County resident for 1 year prior to filing; continuous residence during term",
+                age: "25 years old (TCA § 5-6-104)",
+                residency: "County resident for 1 year prior to filing; continuous residence during term (TCA § 5-6-104)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
-                voterStatus: "Qualified voter of county",
+                voterStatus: "Qualified voter of county (TCA § 5-6-104)",
                 special: "Incompatibility: May not hold any other 'public office for profit' during term (TCA § 5-6-104)."
             },
             "County Commissioner": {
                 age: "18 years of age (TCA § 8-18-101)",
-                residency: "County resident for 1 year prior to qualifying deadline (TCA § 5-5-102(b)(2)); resident of district to be represented (TCA § 5-5-102(b)(1))",
+                residency: "County resident for 1 year prior to qualifying deadline; resident of district to be represented (TCA § 5-5-102)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
-                voterStatus: "Qualified voter of the district to be represented (TCA § 5-5-102(b)(1))",
+                voterStatus: "Qualified voter of the district to be represented (TCA § 5-5-102)",
                 special: "Incompatibilities: Cannot be a county-wide office holder (Mayor, Sheriff, etc.), Director of Schools, or (in counties >200k pop like Hamilton Co.) a member of a municipal governing body (TCA § 5-5-102(c)). Note: County employees are not disqualified (TCA § 5-5-102(c)(1))."
             },
             "Sheriff": {
-                age: "25 years old prior to the qualifying deadline",
-                residency: "County resident for 1 year prior to qualifying deadline",
+                age: "25 years old prior to the qualifying deadline (TCA § 8-8-102)",
+                residency: "County resident for 1 year prior to qualifying deadline (TCA § 8-8-102)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
-                voterStatus: "Qualified voter of county",
+                voterStatus: "Qualified voter of county (TCA § 8-8-102)",
                 special: "Experience: 3 years full-time POST certified experience within previous 10 years. Documentary: File affidavit and confirmation of psychological eval with POST Commission 14 days prior to deadline (TCA § 8-8-102). Incompatibility: May not practice law or serve in General Assembly while in office (TCA § 8-8-101)."
             },
             "County Highway Chief Admin Officer": {
                 age: "At least 18 years of age (TCA § 8-18-101)",
-                residency: "County resident for 1 year prior to qualifying deadline/appointment",
+                residency: "County resident for 1 year prior to qualifying deadline/appointment (TCA § 54-7-104)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
-                voterStatus: "Qualified voter of county",
+                voterStatus: "Qualified voter of county (TCA § 54-7-104)",
                 special: "Educational/Exp: Graduate of accredited engineering school, licensed TN engineer, or 4 years supervisory road exp. Documentary: File affidavits and evidence with TN Highway Officials Certification Board 14 days prior to deadline (TCA § 54-7-104)."
             },
             "County School Board": {
                 age: "18 years of age (TCA § 8-18-101)",
-                residency: "County resident for 1 year prior to qualifying deadline; resident of district represented",
+                residency: "County resident for 1 year prior to qualifying deadline; resident of district represented (TCA § 49-2-202)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
-                voterStatus: "Qualified voter of county and district",
+                voterStatus: "Qualified voter of county and district (TCA § 49-2-202)",
                 special: "Documentary: File proof of HS graduation/GED/HiSET with CEC (TCA § 49-2-202). Incompatibilities: No member of county legislative body or other county official eligible (TCA § 49-2-202). Employment: School system employees cannot serve while simultaneously employed (TCA § 49-2-203)."
             },
             "Constable": {
-                age: "21 years old",
-                residency: "County resident for 1 year prior to qualifying deadline",
+                age: "21 years old (TCA § 8-10-101)",
+                residency: "County resident for 1 year prior to qualifying deadline (TCA § 8-10-101)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
-                voterStatus: "Qualified voter of district",
+                voterStatus: "Qualified voter of district (TCA § 8-10-101)",
                 special: "Documentary: File letter from licensed psychologist with nominating petition certifying candidate is 'mentally and cognitively fit' (TCA § 8-10-102; exception for certain incumbents)."
             },
             "Circuit Court Judge": {
-                age: "30 years old",
-                residency: "State resident for 5 years; circuit/district resident for 1 year",
+                age: "30 years old (TN Constitution Article VI, Section 4)",
+                residency: "State resident for 5 years; circuit/district resident for 1 year (TN Constitution Article VI, Section 4)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
                 voterStatus: "N/A",
                 special: "Professional: Licensed attorney. Documentary: Certify law license status and include Supreme Court registration number on nominating petition (TCA § 2-5-106)."
             },
             "Chancellor": {
-                age: "30 years old",
-                residency: "State resident for 5 years; circuit/district resident for 1 year",
+                age: "30 years old (TN Constitution Article VI, Section 4)",
+                residency: "State resident for 5 years; circuit/district resident for 1 year (TN Constitution Article VI, Section 4)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
                 voterStatus: "N/A",
                 special: "Professional: Licensed attorney. Documentary: Certify law license status and include Supreme Court registration number on nominating petition (TCA § 2-5-106)."
             },
             "District Attorney General": {
                 age: "18 years of age (TCA § 8-18-101)",
-                residency: "State resident for 5 years; circuit/district resident for 1 year",
+                residency: "State resident for 5 years; circuit/district resident for 1 year (TN Constitution Article VI, Section 5)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
                 voterStatus: "N/A",
                 special: "Professional: Licensed attorney. Documentary: Certify law license status and include Supreme Court registration number on nominating petition (TCA § 2-5-106)."
             },
             "District Public Defender": {
                 age: "18 years of age (TCA § 8-18-101)",
-                residency: "State resident for 5 years; judicial district resident for 1 year",
+                residency: "State resident for 5 years; judicial district resident for 1 year (TCA § 8-14-202)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
                 voterStatus: "N/A",
                 special: "Professional: Licensed attorney. Documentary: Certify law license status and include Supreme Court registration number on nominating petition (TCA § 2-5-106)."
             },
             "Juvenile Court Judge": {
-                age: "30 years old",
-                residency: "State resident for 5 years; circuit/district resident for 1 year",
+                age: "30 years old (TN Constitution Article VI, Section 4)",
+                residency: "State resident for 5 years; circuit/district resident for 1 year (TN Constitution Article VI, Section 4)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
                 voterStatus: "N/A",
                 special: "Professional: Licensed attorney. Documentary: Certify law license status and include Supreme Court registration number on nominating petition (TCA § 2-5-106)."
             },
             "General Sessions Judge": {
-                age: "30 years old",
-                residency: "State resident for 5 years; circuit/district resident for 1 year",
+                age: "30 years old (TN Constitution Article VI, Section 4)",
+                residency: "State resident for 5 years; circuit/district resident for 1 year (TN Constitution Article VI, Section 4)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
                 voterStatus: "N/A",
                 special: "Professional: Licensed attorney. Documentary: Certify law license status and include Supreme Court registration number on nominating petition (TCA § 2-5-106)."
             },
             "Clerk of Courts": {
                 age: "18 years of age (TCA § 8-18-101)",
-                residency: "County resident for 1 year prior to qualifying deadline",
+                residency: "County resident for 1 year prior to qualifying deadline (TCA § 8-18-101 and corresponding chapter amendments for each office regarding the 1-year county residency)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
-                voterStatus: "Qualified voter of county",
+                voterStatus: "Qualified voter of county (TCA § 8-18-101 and corresponding chapter amendments for each office regarding the qualified voter status)",
                 special: "None"
             },
             "County Clerk": {
                 age: "18 years of age (TCA § 8-18-101)",
-                residency: "County resident for 1 year prior to qualifying deadline",
+                residency: "County resident for 1 year prior to qualifying deadline (TCA § 8-18-101 and corresponding chapter amendments for each office regarding the 1-year county residency)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
-                voterStatus: "Qualified voter of county",
+                voterStatus: "Qualified voter of county (TCA § 8-18-101 and corresponding chapter amendments for each office regarding the qualified voter status)",
                 special: "None"
             },
             "Register of Deeds": {
                 age: "18 years of age (TCA § 8-18-101)",
-                residency: "County resident for 1 year prior to qualifying deadline",
+                residency: "County resident for 1 year prior to qualifying deadline (TCA § 8-18-101 and corresponding chapter amendments for each office regarding the 1-year county residency)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
-                voterStatus: "Qualified voter of county",
+                voterStatus: "Qualified voter of county (TCA § 8-18-101 and corresponding chapter amendments for each office regarding the qualified voter status)",
                 special: "None"
             },
             "Trustee": {
                 age: "18 years of age (TCA § 8-18-101)",
-                residency: "County resident for 1 year prior to qualifying deadline",
+                residency: "County resident for 1 year prior to qualifying deadline (TCA § 8-18-101 and corresponding chapter amendments for each office regarding the 1-year county residency)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
-                voterStatus: "Qualified voter of county",
+                voterStatus: "Qualified voter of county (TCA § 8-18-101 and corresponding chapter amendments for each office regarding the qualified voter status)",
                 special: "None"
             },
             "Assessor of Property": {
                 age: "18 years of age (TCA § 8-18-101)",
-                residency: "County resident for 1 year prior to qualifying deadline",
+                residency: "County resident for 1 year prior to qualifying deadline (TCA § 8-18-101 and corresponding chapter amendments for each office regarding the 1-year county residency)",
                 citizenship: "Citizen of the United States and the State of Tennessee (TCA § 8-18-101)",
-                voterStatus: "Qualified voter of county",
+                voterStatus: "Qualified voter of county (TCA § 8-18-101 and corresponding chapter amendments for each office regarding the qualified voter status)",
                 special: "Incompatibility: No member of the county legislative body shall be eligible to hold the office (TCA § 67-1-503)."
             },
             "Chattanooga Mayor": {
@@ -685,23 +685,34 @@
 
             // Determine source citation for municipal offices
             let citationSuffix = '';
-            const municipalTowns = ['Lookout Mountain', 'Signal Mountain', 'Walden'];
-            const municipalCities = ['Chattanooga', 'Collegedale', 'East Ridge', 'Lakesite', 'Red Bank', 'Ridgeside', 'Soddy Daisy'];
             
-            const isTown = municipalTowns.some(town => selectedOffice.startsWith(town));
-            const isCity = municipalCities.some(city => selectedOffice.startsWith(city));
-            
-            if (isTown) {
-                citationSuffix = ' (Town Charter)';
-            } else if (isCity) {
-                citationSuffix = ' (City Charter)';
+            if (selectedOffice.startsWith('Chattanooga')) {
+                citationSuffix = ' (Chattanooga City Charter)';
+            } else if (selectedOffice.startsWith('Collegedale')) {
+                citationSuffix = ' (Collegedale City Charter)';
+            } else if (selectedOffice.startsWith('East Ridge')) {
+                citationSuffix = ' (East Ridge City Charter)';
+            } else if (selectedOffice.startsWith('Lakesite')) {
+                citationSuffix = ' (Lakesite City Charter)';
+            } else if (selectedOffice.startsWith('Lookout Mountain')) {
+                citationSuffix = ' (Lookout Mountain Town Charter)';
+            } else if (selectedOffice.startsWith('Red Bank')) {
+                citationSuffix = ' (Red Bank City Charter)';
+            } else if (selectedOffice.startsWith('Ridgeside')) {
+                citationSuffix = ' (Ridgeside City Charter)';
+            } else if (selectedOffice.startsWith('Signal Mountain')) {
+                citationSuffix = ' (Signal Mountain Town Charter)';
+            } else if (selectedOffice.startsWith('Soddy Daisy')) {
+                citationSuffix = ' (Soddy Daisy City Charter)';
+            } else if (selectedOffice.startsWith('Walden')) {
+                citationSuffix = ' (Walden Town Charter)';
             }
 
             function parseRequirement(titleBase, descText) {
                 if (!descText) return { title: titleBase, desc: '' };
                 
-                // Match parenthesized citations starting with TCA, PC, TN Const., or Const.
-                const citeRegex = /\s*\((TCA|PC|TN Const\.|Const\.)\s+[^)]+\)/gi;
+                // Match parenthesized citations starting with TCA, PC, TN Const., TN Constitution, US Const., US Constitution, Const., Constitution, or U.S. Const.
+                const citeRegex = /\s*\((TCA|PC|TN Const\.|TN Constitution|US Const\.|US Constitution|Const\.|Constitution|U\.S\.\s+Const\.)\s+[^)]+\)/gi;
                 
                 let title = titleBase;
                 let desc = descText;
